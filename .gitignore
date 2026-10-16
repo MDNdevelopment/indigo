@@ -4,3 +4,5 @@ dist
 .env
 .DS_Store
 .audit/
+*.md
+!README.md

@@ -1,0 +1,44 @@
+---
+import Media from './Media.astro';
+export interface Item {
+  id: string;
+  title: string;
+  text: string;
+  href: string;
+  image: ImageMetadata;
+  pos?: string;
+}
+export interface Props {
+  items: Item[];
+  more: string;
+}
+const { items, more } = Astro.props;
+---
+
+<!-- Servicios como ciclo: una foto recortada en rombo (la forma del isotipo) cambia al elegir cada servicio, con clic o con el cursor. Sin JS se ven todos los textos. -->
+<div class="cycle" data-cycle>
+  <ul class="cycle-list">
+    {items.map((it, i) => (
+      <li class:list={['cycle-item', { 'is-active': i === 0 }]} data-cycle-item data-batch>
+        <button type="button" class="cycle-tab" data-cycle-tab aria-expanded={i === 0 ? 'true' : 'false'} aria-controls={`cycle-${it.id}`}>
+          {it.title}
+        </button>
+        <div class="cycle-body" id={`cycle-${it.id}`}>
+          <div class="cycle-body-in">
+            <p>{it.text}</p>
+            <a class="link-arrow" href={it.href}>{more} →</a>
+          </div>
+        </div>
+      </li>
+    ))}
+  </ul>
+  <div class="cycle-visual" data-fade>
+    <div class="cycle-frame">
+      {items.map((it, i) => (
+        <div class:list={['cycle-shot', { 'is-active': i === 0 }]} data-cycle-shot>
+          <Media src={it.image} alt="" eager={i === 0} sizes="(min-width: 900px) 44vw, 90vw" pos={it.pos} />
+        </div>
+      ))}
+    </div>
+  </div>
+</div>

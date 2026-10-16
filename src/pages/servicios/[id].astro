@@ -1,0 +1,13 @@
+---
+import ServiceDetail from '../../views/ServiceDetail.astro';
+import { services } from '../../data/services';
+
+export function getStaticPaths() {
+  const items = services;
+  return items.map((service) => ({ params: { id: service.id }, props: { service } }));
+}
+const { service } = Astro.props;
+const lang = 'es';
+---
+
+<ServiceDetail lang={lang} service={service} />

@@ -1,0 +1,47 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import PageHero from '../components/PageHero.astro';
+import ContactForm from '../components/ContactForm.astro';
+import type { Lang } from '../config/site';
+import { site } from '../config/site';
+import { getT } from '../i18n';
+import { photos } from '../data/photos';
+import { breadcrumbSchema } from '../lib/schema';
+
+export interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = getT(lang);
+const p = t.contactPage;
+---
+
+<Base title={t.nav.contact} lang={lang} description={p.meta} path="/contacto" jsonLd={[breadcrumbSchema(lang, [{ name: t.common.home, path: '/' }, { name: t.nav.contact, path: '/contacto' }])]}>
+  <Nav lang={lang} path="/contacto" dark />
+  <main id="main">
+    <PageHero title={p.title} intro={p.intro} image={photos.viaAsfalto} pos="50% 50%" />
+
+    <section class="section" id="contacto">
+      <div class="wrap contact-grid">
+        <div class="contact-form-wrap" data-fade>
+          <ContactForm lang={lang} />
+        </div>
+        <div class="contact-info">
+          <h2 class="contact-big" data-split>{p.info.business}</h2>
+          <ul class="contact-data" data-fade data-fade-delay="150">
+            <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+            <li><a href={`tel:${site.phone.replace(/\s/g, '')}`}>{site.phone}</a></li>
+            <li>{site.address.street}, {site.address.city} {site.address.postalCode}</li>
+          </ul>
+          <h3 class="contact-sub" data-fade>{p.info.careers}</h3>
+          <ul class="contact-data" data-fade>
+            <li><a href={`mailto:${site.hrEmail}`}>{site.hrEmail}</a></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer lang={lang} />
+</Base>

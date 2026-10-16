@@ -1,0 +1,87 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import PageHero from '../components/PageHero.astro';
+import type { Lang } from '../config/site';
+import { getT, localePath } from '../i18n';
+import { projects, projectText, countryNames } from '../data/projects';
+import type { Project } from '../data/projects';
+import { sectors } from '../data/sectors';
+import { abs, breadcrumbSchema } from '../lib/schema';
+
+export interface Props {
+  lang: Lang;
+  project: Project;
+}
+const { lang, project } = Astro.props;
+const t = getT(lang);
+const f = t.projectsPage.facts;
+const x = projectText(project, lang);
+const L = (path: string) => localePath(lang, path);
+const i = projects.findIndex((p) => p.slug === project.slug);
+const next = projects[(i + 1) % projects.length];
+const nextText = projectText(next, lang);
+const sector = sectors.find((s) => s.id === project.sector)!;
+const path = `/proyectos/${project.slug}`;
+
+const facts = [
+  { k: f.client, v: project.client },
+  { k: f.location, v: `${x.place}, ${countryNames[project.country][lang]}` },
+  { k: f.year, v: project.year },
+  { k: f.unit, v: sector[lang].title },
+  { k: f.capacity, v: project.capacity },
+].filter((r): r is { k: string; v: string } => !!r.v);
+---
+
+<Base
+  title={x.title}
+  lang={lang}
+  description={x.summary}
+  path={path}
+  jsonLd={[
+    breadcrumbSchema(lang, [{ name: t.common.home, path: '/' }, { name: t.nav.projects, path: '/proyectos' }, { name: x.title, path }]),
+    { '@type': 'Project', name: x.title, description: x.summary, url: abs(L(path)), sponsor: project.client ? { '@type': 'Organization', name: project.client } : undefined },
+  ]}
+>
+  <Nav lang={lang} path={path} dark />
+  <main id="main">
+    <PageHero title={x.title} intro={x.summary} image={project.image} pos={project.pos} />
+
+    <section class="section">
+      <div class="wrap project-detail">
+        <dl class="facts" data-fade>
+          {facts.map((r) => (
+            <div class="fact">
+              <dt>{r.k}</dt>
+              <dd>{r.v}</dd>
+            </div>
+          ))}
+        </dl>
+        <div class="project-body">
+          <h2 class="h-title" data-split>{f.scope}</h2>
+          <ul class="detail-list">
+            {x.scope.map((s) => <li data-batch>{s}</li>)}
+          </ul>
+          {x.impact && (
+            <>
+              <h2 class="h-title" data-split>{f.impact}</h2>
+              <ul class="detail-list">
+                {x.impact.map((s) => <li data-batch>{s}</li>)}
+              </ul>
+            </>
+          )}
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-dark next-project">
+      <div class="wrap">
+        <p class="lead">{t.common.nextProject}</p>
+        <a class="next-link" href={L(`/proyectos/${next.slug}`)} data-split>{nextText.title} →</a>
+        <p class="next-back"><a class="link-arrow" href={L('/proyectos')}>{t.common.backToProjects}</a></p>
+      </div>
+    </section>
+  </main>
+  <Footer lang={lang} />
+</Base>

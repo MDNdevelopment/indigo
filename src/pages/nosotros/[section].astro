@@ -1,0 +1,12 @@
+---
+import AboutSection from '../../views/AboutSection.astro';
+
+export function getStaticPaths() {
+  const sections = ['cultura', 'talento', 'clientes'] as const;
+  return sections.map((section) => ({ params: { section: section }, props: { section } }));
+}
+const { section } = Astro.props;
+const lang = 'es';
+---
+
+<AboutSection lang={lang} section={section} />

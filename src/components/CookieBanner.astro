@@ -1,0 +1,29 @@
+---
+// Aviso de cookies con Consent Mode v2 (ver Analytics.astro). La decisión se guarda en localStorage ('mdn-cookie-consent').
+// Se muestra si site.analytics.consent === 'banner' (valor por defecto). La lógica vive en scripts/cookies.ts.
+import { site } from '../config/site';
+import type { Lang } from '../config/site';
+import { getT, localePath } from '../i18n';
+export interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const c = getT(lang).cookieBanner;
+const show = site.analytics.consent === 'banner';
+---
+
+{
+  show && (
+    <div class="cookie-banner" data-cookie-banner role="dialog" aria-live="polite" aria-label={c.label} hidden>
+      <div class="wrap cookie-inner">
+        <p>
+          {c.text} <a href={localePath(lang, '/politica-de-cookies')}>{c.cookies}</a> · <a href={localePath(lang, '/politica-de-privacidad')}>{c.privacy}</a>.
+        </p>
+        <div class="cookie-actions">
+          <button type="button" class="btn" data-cookie-reject>{c.reject}</button>
+          <button type="button" class="btn btn-solid" data-cookie-accept>{c.accept}</button>
+        </div>
+      </div>
+    </div>
+  )
+}

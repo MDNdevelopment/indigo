@@ -1,0 +1,29 @@
+---
+import { Picture } from 'astro:assets';
+export interface Props {
+  src: ImageMetadata;
+  alt: string;
+  eager?: boolean;
+  sizes?: string;
+  class?: string;
+  ratio?: string;
+  /** foco de la foto al recortar (object-position) */
+  pos?: string;
+}
+const { src, alt, eager = false, sizes = '(min-width: 900px) 50vw, 100vw', class: cls = '', ratio, pos } = Astro.props;
+const style = [ratio ? `aspect-ratio:${ratio}` : '', pos ? `--pos:${pos}` : ''].filter(Boolean).join(';');
+---
+
+<div class:list={['media', cls]} style={style || undefined}>
+  <Picture
+    src={src}
+    alt={alt}
+    formats={['avif', 'webp']}
+    fallbackFormat="jpg"
+    widths={[480, 900, 1400, 2000]}
+    sizes={sizes}
+    loading={eager ? 'eager' : 'lazy'}
+    fetchpriority={eager ? 'high' : undefined}
+    decoding={eager ? 'sync' : 'async'}
+  />
+</div>

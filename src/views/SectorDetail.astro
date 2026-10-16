@@ -1,0 +1,81 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import Media from '../components/Media.astro';
+import PageHero from '../components/PageHero.astro';
+import BandList from '../components/BandList.astro';
+import SiblingCards from '../components/SiblingCards.astro';
+import CtaEnd from '../components/CtaEnd.astro';
+import type { Lang } from '../config/site';
+import { getT, localePath } from '../i18n';
+import { sectors } from '../data/sectors';
+import type { Sector } from '../data/sectors';
+import { projects, projectText } from '../data/projects';
+import { breadcrumbSchema } from '../lib/schema';
+
+export interface Props {
+  lang: Lang;
+  sector: Sector;
+}
+const { lang, sector } = Astro.props;
+const t = getT(lang);
+const p = t.sectorsPage;
+const x = sector[lang];
+const path = `/sectores/${sector.id}`;
+const others = sectors.filter((s) => s.id !== sector.id).map((o) => ({ href: localePath(lang, `/sectores/${o.id}`), title: o[lang].title, text: o[lang].short, image: o.image, pos: o.pos }));
+const related = projects
+  .filter((pr) => pr.sector === sector.id)
+  .map((pr) => ({ href: localePath(lang, `/proyectos/${pr.slug}`), title: projectText(pr, lang).title, text: projectText(pr, lang).place, image: pr.image, pos: pr.pos }));
+---
+
+<Base
+  title={x.title}
+  lang={lang}
+  description={x.short}
+  path={path}
+  jsonLd={[breadcrumbSchema(lang, [{ name: t.common.home, path: '/' }, { name: t.nav.sectors, path: '/sectores' }, { name: x.title, path }])]}
+>
+  <Nav lang={lang} path={path} dark />
+  <main id="main">
+    <PageHero title={x.title} intro={x.lead} image={sector.image} pos={sector.pos} />
+
+    <section class="section sector">
+      <div class="wrap">
+        <div class:list={['sector-layout', { 'has-photo': related.length > 0 }]}>
+          {related.length > 0 && (
+            <div class="sector-side">
+              <Media src={related[0].image} alt="" ratio="4 / 5" pos={related[0].pos} sizes="(min-width: 900px) 34vw, 100vw" />
+            </div>
+          )}
+          <div class="sector-groups">
+            {sector[lang].groups.map((g) => (
+              <div class="sector-group" data-batch>
+                <h2>{g.title}</h2>
+                <ul>
+                  {g.items.map((it) => <li>{it}</li>)}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {related.length > 0 && (
+      <>
+        <section class="section related-head" id="proyectos">
+          <div class="wrap">
+            <h2 class="h-title" data-split>{t.common.relatedProjects}</h2>
+          </div>
+        </section>
+        <BandList items={related} more={t.common.seeMore} />
+      </>
+    )}
+
+    <SiblingCards title={t.common.otherSectors} items={others} />
+
+    <CtaEnd lang={lang} title={p.cta.title} text={p.cta.text} />
+  </main>
+  <Footer lang={lang} />
+</Base>

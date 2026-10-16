@@ -1,0 +1,92 @@
+---
+// Páginas legales (privacidad y cookies). Título sobrio sin foto, a propósito: no llevan header de foto ni animaciones.
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import type { Lang } from '../config/site';
+import { site } from '../config/site';
+import { getT, localePath } from '../i18n';
+
+export interface Props {
+  lang: Lang;
+  kind: 'privacy' | 'cookies';
+}
+const { lang, kind } = Astro.props;
+const t = getT(lang);
+const l = t.legal;
+const path = kind === 'privacy' ? '/politica-de-privacidad' : '/politica-de-cookies';
+const usaAnalitica = Boolean(site.analytics.gaId);
+
+const vars: Record<string, string> = {
+  legalName: site.legalName,
+  name: site.name,
+  domain: site.url.replace(/^https?:\/\//, ''),
+  email: site.email,
+  phone: site.phone,
+  city: site.address.city,
+  country: 'Venezuela',
+  rif: site.rif,
+};
+const fill = (s: string) => s.replace(/\{(\w+)\}/g, (_, k) => vars[k] ?? `{${k}}`);
+
+const cookieRows = [
+  ...(usaAnalitica ? [{ name: '_ga, _ga_*', who: 'Google Analytics', ...l.cookies.rows.ga }] : []),
+  { name: 'mdn-cookie-consent', who: `${site.name} (localStorage)`, ...l.cookies.rows.consent },
+];
+const meta = kind === 'privacy' ? l.privacy.meta : l.cookies.meta;
+const title = kind === 'privacy' ? l.privacy.title : l.cookies.title;
+---
+
+<Base title={title} lang={lang} description={meta} {path}>
+  <Nav {lang} {path} />
+  <main id="main" class="legal section">
+    <div class="wrap">
+      <h1>{title}</h1>
+      {kind === 'privacy' ? (
+        <>
+          <p>{l.privacy.intro}</p>
+          {l.privacy.sections.map((s) => (
+            <>
+              <h2>{s.h}</h2>
+              {s.p.map((x) => <p>{fill(x)}</p>)}
+              {s.list && <ul>{s.list.map((x) => <li>{fill(x.replace('{analytics}', usaAnalitica ? l.privacy.analyticsOn : l.privacy.analyticsOff))}</li>)}</ul>}
+            </>
+          ))}
+        </>
+      ) : (
+        <>
+          <p>{l.cookies.intro}</p>
+          <h2>{l.cookies.what.h}</h2>
+          <p>{l.cookies.what.p}</p>
+          <h2>{l.cookies.used.h}</h2>
+          <p>{l.cookies.used.p}{!usaAnalitica && ` ${l.cookies.none}`}</p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>{l.cookies.table.name}</th><th>{l.cookies.table.type}</th><th>{l.cookies.table.duration}</th><th>{l.cookies.table.purpose}</th></tr>
+              </thead>
+              <tbody>
+                {cookieRows.map((c) => (
+                  <tr>
+                    <td><code>{c.name}</code><br />{c.who}</td>
+                    <td>{c.type}</td>
+                    <td>{c.duration}</td>
+                    <td>{c.purpose}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <h2>{l.cookies.manage.h}</h2>
+          <p>{l.cookies.manage.p}</p>
+          <h2>{l.cookies.more.h}</h2>
+          <p>
+            {l.cookies.more.p.split('{privacy}')[0]}<a href={localePath(lang, '/politica-de-privacidad')}>{l.cookies.more.privacy}</a>{fill(l.cookies.more.p.split('{privacy}')[1] ?? '')}
+          </p>
+        </>
+      )}
+      <p class="updated">{l.updatedLabel}: {site.legal.updated[lang]}.</p>
+    </div>
+  </main>
+  <Footer {lang} />
+</Base>

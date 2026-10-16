@@ -1,0 +1,14 @@
+---
+import SectorDetail from '../../../views/SectorDetail.astro';
+import { slugFor } from '../../../i18n';
+import { sectors } from '../../../data/sectors';
+
+export function getStaticPaths() {
+  const items = sectors;
+  return items.map((sector) => ({ params: { id: slugFor('en', sector.id) }, props: { sector } }));
+}
+const { sector } = Astro.props;
+const lang = 'en';
+---
+
+<SectorDetail lang={lang} sector={sector} />

@@ -1,0 +1,33 @@
+---
+import Media from './Media.astro';
+export interface Item {
+  href: string;
+  title: string;
+  text?: string;
+  image: ImageMetadata;
+  pos?: string;
+}
+export interface Props {
+  items: Item[];
+  more: string;
+}
+const { items, more } = Astro.props;
+---
+
+<!-- Franjas a todo el ancho: texto sobre color y foto con borde diagonal, sin esquinas redondeadas. -->
+<ul class="stripes">
+  {items.map((it) => (
+    <li class="stripe">
+      <a class="stripe-link" href={it.href}>
+        <div class="stripe-text">
+          <h2 data-split>{it.title}</h2>
+          {it.text && <p>{it.text}</p>}
+          <span class="stripe-go">{more} <span aria-hidden="true">→</span></span>
+        </div>
+        <div class="stripe-photo">
+          <Media src={it.image} alt="" sizes="(min-width: 900px) 55vw, 100vw" pos={it.pos} />
+        </div>
+      </a>
+    </li>
+  ))}
+</ul>

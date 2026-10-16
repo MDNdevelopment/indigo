@@ -1,0 +1,23 @@
+---
+import Media from './Media.astro';
+import isotipo from '../assets/brand/isotipo.svg';
+export interface Props {
+  title: string;
+  intro?: string;
+  /** Foto del header. Distinta en cada página y distinta de la del hero del home. */
+  image: ImageMetadata;
+  pos?: string;
+}
+const { title, intro, image, pos } = Astro.props;
+---
+
+<!-- Header diagonal dividido (ver references/headers.md): titular sobre el color de marca y foto con el borde izquierdo en diagonal. -->
+<section class="ph" data-hero-root style={`--iso:url(${isotipo.src})`}>
+  <div class="ph-text">
+    <h1 class="ph-title" data-split data-hero>{title}</h1>
+    {intro && <p class="ph-lead" data-hero-rest>{intro}</p>}
+  </div>
+  <div class="ph-photo" data-hero-media>
+    <Media src={image} alt="" eager sizes="(min-width: 900px) 50vw, 100vw" pos={pos} />
+  </div>
+</section>

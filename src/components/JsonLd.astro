@@ -1,0 +1,12 @@
+---
+import type { Lang } from '../config/site';
+import { baseGraph } from '../lib/schema';
+export interface Props {
+  lang: Lang;
+  nodes?: Record<string, unknown>[];
+}
+const { lang, nodes = [] } = Astro.props;
+const graph = { '@context': 'https://schema.org', '@graph': [...baseGraph(lang), ...nodes] };
+---
+
+<script type="application/ld+json" is:inline set:html={JSON.stringify(graph)} />

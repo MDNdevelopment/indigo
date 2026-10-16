@@ -1,0 +1,14 @@
+---
+import QualityDetail from '../../../views/QualityDetail.astro';
+import { slugFor } from '../../../i18n';
+import { qualityPages } from '../../../data/quality';
+
+export function getStaticPaths() {
+  const items = qualityPages;
+  return items.map((page) => ({ params: { id: slugFor('en', page.id) }, props: { page } }));
+}
+const { page } = Astro.props;
+const lang = 'en';
+---
+
+<QualityDetail lang={lang} page={page} />

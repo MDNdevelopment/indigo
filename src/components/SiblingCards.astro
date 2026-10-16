@@ -1,0 +1,33 @@
+---
+import Media from './Media.astro';
+export interface Item {
+  href: string;
+  title: string;
+  text: string;
+  image: ImageMetadata;
+  pos?: string;
+}
+export interface Props {
+  title: string;
+  items: Item[];
+}
+const { title, items } = Astro.props;
+---
+
+<!-- Tarjetas con foto hacia las páginas hermanas, para cambiar de una a otra sin volver al menú -->
+<section class="section">
+  <div class="wrap">
+    <h2 class="h-title" data-split>{title}</h2>
+    <ul class="sib">
+      {items.map((o) => (
+        <li data-fade>
+          <a href={o.href}>
+            <div class="sib-photo"><Media src={o.image} alt="" ratio="4 / 3" pos={o.pos} sizes="(min-width: 1000px) 22vw, (min-width: 640px) 46vw, 100vw" /></div>
+            <h3>{o.title}</h3>
+            <p>{o.text}</p>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

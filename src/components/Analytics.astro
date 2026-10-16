@@ -1,0 +1,28 @@
+---
+// Google Analytics 4 (gtag.js) con Consent Mode v2. El ID sale de site.ts → analytics.gaId.
+// Sin ID no se renderiza nada. Debe ser is:inline: si Astro lo empaqueta como módulo,
+// `gtag` deja de ser global y los eventos y el consentimiento nunca llegan a Analytics.
+import { site } from '../config/site';
+const { gaId, consent } = site.analytics;
+---
+
+{
+  gaId && (
+    <>
+      <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} />
+      <script is:inline define:vars={{ gaId, consent }}>
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = function () { dataLayer.push(arguments); };
+        var granted = consent === 'granted';
+        try { if (localStorage.getItem('mdn-cookie-consent') === 'accepted') granted = true; } catch (e) {}
+        var state = granted ? 'granted' : 'denied';
+        gtag('consent', 'default', {
+          ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: state,
+          wait_for_update: 500,
+        });
+        gtag('js', new Date());
+        gtag('config', gaId);
+      </script>
+    </>
+  )
+}

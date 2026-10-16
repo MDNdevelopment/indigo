@@ -1,0 +1,13 @@
+---
+import QualityDetail from '../../views/QualityDetail.astro';
+import { qualityPages } from '../../data/quality';
+
+export function getStaticPaths() {
+  const items = qualityPages;
+  return items.map((page) => ({ params: { id: page.id }, props: { page } }));
+}
+const { page } = Astro.props;
+const lang = 'es';
+---
+
+<QualityDetail lang={lang} page={page} />

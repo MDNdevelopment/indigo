@@ -1,0 +1,147 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import Media from '../components/Media.astro';
+import HeroEditorial from '../components/HeroEditorial.astro';
+import WorldMap from '../components/WorldMap.astro';
+import ServiceCycle from '../components/ServiceCycle.astro';
+import CtaEnd from '../components/CtaEnd.astro';
+import type { Lang } from '../config/site';
+import { getT, localePath } from '../i18n';
+import { photos } from '../data/photos';
+import { services } from '../data/services';
+import { sectors } from '../data/sectors';
+import { projects, projectText, countryNames } from '../data/projects';
+
+export interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = getT(lang);
+const L = (p: string) => localePath(lang, p);
+
+// Las cuatro slides del hero
+const heroPhotos: { image: ImageMetadata; pos?: string }[] = [
+  { image: photos.lovera, pos: '50% 60%' },
+  { image: photos.camejo, pos: '40% 50%' },
+  { image: photos.tanqueYpfb, pos: '50% 40%' },
+  { image: photos.viaAerea, pos: '50% 50%' },
+];
+const slides = t.hero.slides.map((s, i) => ({ ...s, href: L(s.href), ...heroPhotos[i] }));
+
+const stepImage = (id: string) => services.find((s) => s.id === id)!.image;
+const featured = projects.filter((p) => p.featured);
+
+const places = [
+  { id: 've', name: countryNames.ve[lang], text: lang === 'es' ? 'Sede, plantas de generación, gas e infraestructura' : 'Headquarters, power plants, gas and infrastructure', home: true },
+  { id: 'bo', name: countryNames.bo[lang], text: lang === 'es' ? 'Generación, vialidad y patios de tanques' : 'Power, roads and tank farms' },
+  { id: 'cr', name: countryNames.cr[lang], text: lang === 'es' ? 'Tanques de almacenamiento de combustible' : 'Fuel storage tanks' },
+  { id: 'cw', name: countryNames.cw[lang], text: lang === 'es' ? 'Manejo de crudo en refinería' : 'Crude handling at a refinery' },
+  { id: 'sa', name: countryNames.sa[lang], text: lang === 'es' ? 'Planta de procesamiento de alimentos' : 'Food processing plant' },
+  { id: 'mx', name: lang === 'es' ? 'México' : 'Mexico', text: lang === 'es' ? 'Presencia' : 'Presence' },
+] as const;
+---
+
+<Base title={t.tagline} lang={lang} path="/">
+  <Nav lang={lang} path="/" dark />
+  <main id="main">
+    <HeroEditorial label={t.hero.label} slides={slides} />
+
+    <!-- Qué hace Indigo: foto a ancho completo con la frase encima -->
+    <section class="band section-dark">
+      <div class="band-media" aria-hidden="true">
+        <Media src={photos.turbinas} alt="" sizes="100vw" pos="60% 60%" />
+      </div>
+      <div class="wrap band-copy">
+        <p class="statement" data-lines>{t.home.band.statement}</p>
+        <p class="band-facts" data-fade>{t.home.band.facts}</p>
+      </div>
+    </section>
+
+    <!-- Servicios: frame sticky con crossfade -->
+    <section class="section" id="servicios">
+      <div class="wrap">
+        <div class="head-row">
+          <div>
+            <h2 class="h-title" data-split>{t.home.services.title}</h2>
+            <p class="lead head-lead" data-fade>{t.home.services.lead}</p>
+          </div>
+          <a class="link-arrow" href={L('/servicios')} data-fade>{t.home.services.link} →</a>
+        </div>
+        <ServiceCycle
+          more={t.common.seeMore}
+          items={t.steps.map((s) => ({ id: s.id, title: s.title, text: s.text, href: L(`/servicios/${s.id}`), image: stepImage(s.id) }))}
+        />
+      </div>
+    </section>
+
+    <!-- Sectores: cuatro tarjetas con foto fija y los alcances reales de cada rubro -->
+    <section class="section section-soft" id="sectores">
+      <div class="wrap">
+        <div class="head-row">
+          <div>
+            <h2 class="h-title" data-split>{t.home.sectors.title}</h2>
+          </div>
+          <a class="link-arrow" href={L('/sectores')} data-fade>{t.home.sectors.link} →</a>
+        </div>
+        <ul class="sec-spec">
+          {sectors.map((s) => (
+            <li data-batch>
+              <a href={L(`/sectores/${s.id}`)}>
+                <h3>{s[lang].title}</h3>
+                <p>{s[lang].short}</p>
+                <ul class="sec-spec-items">
+                  {s[lang].groups.slice(0, 3).map((g) => (
+                    <li>{g.title}</li>
+                  ))}
+                </ul>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <!-- Proyectos: mosaico con foto y datos encima -->
+    <section class="section" id="obras">
+      <div class="wrap">
+        <div class="head-row">
+          <h2 class="h-title" data-split>{t.home.projects.title}</h2>
+          <a class="link-arrow" href={L('/proyectos')} data-fade>{t.home.projects.link} →</a>
+        </div>
+
+        <ul class="ledger">
+          {featured.map((p) => {
+            const x = projectText(p, lang);
+            const sector = sectors.find((q) => q.id === p.sector)!;
+            return (
+              <li data-batch>
+                <a href={L(`/proyectos/${p.slug}`)}>
+                  <span class="ledger-fig">{p.capacity ?? sector[lang].title}</span>
+                  <span class="ledger-text">
+                    <strong>{x.title}</strong>
+                    <span>{countryNames[p.country][lang]}{p.client ? ` · ${p.client}` : ''}</span>
+                  </span>
+                  <Media src={p.image} alt="" ratio="16 / 9" sizes="9rem" pos={p.pos} />
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </section>
+
+    <!-- Presencia global -->
+    <section class="section section-brand">
+      <div class="wrap">
+        <h2 class="h-title map-title" data-split>{t.home.map.title}</h2>
+        <p class="lead" data-fade>{t.home.map.lead}</p>
+        <WorldMap aria={t.home.map.aria} places={[...places]} />
+      </div>
+    </section>
+
+    <CtaEnd lang={lang} title={t.home.cta.title} text={t.home.cta.text} />
+  </main>
+  <Footer lang={lang} />
+</Base>

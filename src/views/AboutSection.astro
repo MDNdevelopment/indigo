@@ -1,0 +1,171 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import Media from '../components/Media.astro';
+import PageHero from '../components/PageHero.astro';
+import AboutNav from '../components/AboutNav.astro';
+import CtaEnd from '../components/CtaEnd.astro';
+import type { Lang } from '../config/site';
+import { site } from '../config/site';
+import { getT, localePath } from '../i18n';
+import { photos } from '../data/photos';
+import { projects, projectText, countryNames } from '../data/projects';
+import { breadcrumbSchema } from '../lib/schema';
+
+type Section = 'cultura' | 'talento' | 'clientes';
+export interface Props {
+  lang: Lang;
+  section: Section;
+}
+const { lang, section } = Astro.props;
+const t = getT(lang);
+const a = t.about;
+const s = a.sub[section];
+const path = `/nosotros/${section}`;
+const heroes = { cultura: photos.estructura, talento: photos.trabajoEquipo, clientes: photos.tanqueBlanco };
+const valuePhotos = [photos.turbinas, photos.lineas, photos.planos, photos.equipo];
+
+// Clientes agrupados desde las fichas de proyecto: nombre, países y proyectos
+const byClient = new Map<string, typeof projects>();
+for (const pr of projects) {
+  if (!pr.client) continue;
+  byClient.set(pr.client, [...(byClient.get(pr.client) ?? []), pr]);
+}
+const clientCards = [...byClient.entries()]
+  .map(([name, list]) => ({ name, list, countries: [...new Set(list.map((pr) => countryNames[pr.country][lang]))].join(', ') }))
+  .sort((x, y) => y.list.length - x.list.length);
+---
+
+<Base
+  title={s.title}
+  lang={lang}
+  description={s.meta}
+  path={path}
+  jsonLd={[breadcrumbSchema(lang, [{ name: t.common.home, path: '/' }, { name: t.nav.about, path: '/nosotros' }, { name: s.title, path }])]}
+>
+  <Nav lang={lang} path={path} dark />
+  <main id="main">
+    <PageHero title={s.title} intro={s.intro} image={heroes[section]} pos="50% 50%" />
+
+    {section === 'cultura' && (
+      <>
+        <section class="section" id="cultura">
+          <div class="wrap">
+            <AboutNav lang={lang} current={section} />
+            <div class="culture-head">
+              <p class="lead" data-fade>{a.culture.text}</p>
+            </div>
+            <div class="mv">
+              <article class="mv-card mv-mission" data-batch>
+                <h3>{a.culture.mission.title}</h3>
+                <p>{a.culture.mission.text}</p>
+              </article>
+              <article class="mv-card mv-vision" data-batch>
+                <Media src={photos.torres} alt="" sizes="(min-width: 900px) 40vw, 100vw" />
+                <div class="mv-vision-text">
+                  <h3>{a.culture.vision.title}</h3>
+                  <p>{a.culture.vision.text}</p>
+                </div>
+              </article>
+            </div>
+          </div>
+        </section>
+        <section class="section section-soft" id="valores">
+          <div class="wrap">
+            <h2 class="h-title" data-split>{a.values.title}</h2>
+            <ul class="values">
+              {a.values.items.map((v, i) => (
+                <li class="value" data-fade>
+                  <div class="value-photo"><Media src={valuePhotos[i]} alt="" ratio="16 / 10" sizes="(min-width: 900px) 40vw, 100vw" /></div>
+                  <h3>{v.title}</h3>
+                  <p>{v.text}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      </>
+    )}
+
+    {section === 'talento' && (
+      <>
+        <section class="section" id="talento">
+          <div class="wrap">
+            <AboutNav lang={lang} current={section} />
+            <div class="talent">
+              <div class="talent-copy">
+                <p class="lead" data-fade>{a.talent.text}</p>
+                <p class="lead" data-fade>{a.talent.growth}</p>
+              </div>
+              <div class="talent-photo" data-fade>
+                <Media src={photos.equipo} alt="" ratio="4 / 5" sizes="(min-width: 900px) 40vw, 100vw" />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section section-dark" id="equipo">
+          <div class="wrap team-split">
+            <div>
+              <p class="team-share"><span data-count={a.talent.team.eng.length}>{a.talent.team.eng.length}</span></p>
+              <h2 class="team-title" data-split>{a.talent.team.title}</h2>
+              <p class="lead">{a.talent.team.text}</p>
+            </div>
+            <div class="team-lists">
+              <div data-batch>
+                <h3>{a.talent.team.engTitle}</h3>
+                <ul>{a.talent.team.eng.map((d) => <li>{d}</li>)}</ul>
+              </div>
+              <div data-batch>
+                <h3>{a.talent.team.supportTitle}</h3>
+                <ul>{a.talent.team.support.map((d) => <li>{d}</li>)}</ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="desarrollo-profesional">
+          <div class="wrap grow">
+            <div class="grow-photo" data-fade>
+              <Media src={photos.planos} alt="" ratio="4 / 3" sizes="(min-width: 900px) 44vw, 100vw" />
+            </div>
+            <div class="grow-copy">
+              <h2 class="h-title" data-split>{a.sub.talento.developmentTitle}</h2>
+              {a.sub.talento.development.map((para) => <p class="lead" data-fade>{para}</p>)}
+              <p class="lead" data-fade>{a.sub.talento.hiring}</p>
+              <p class="grow-cv" data-fade>
+                <span>{a.talent.cta}</span>
+                <a class="btn btn-solid" href={`mailto:${site.hrEmail}`}>{site.hrEmail}</a>
+              </p>
+            </div>
+          </div>
+        </section>
+      </>
+    )}
+
+    {section === 'clientes' && (
+      <section class="section" id="clientes">
+        <div class="wrap">
+          <AboutNav lang={lang} current={section} />
+          <h2 class="h-title" data-split>{a.clients.title}</h2>
+          <ul class="clients">
+            {clientCards.map((c) => (
+              <li class="client" data-batch>
+                <div class="client-photo"><Media src={c.list[0].image} alt="" ratio="4 / 3" pos={c.list[0].pos} sizes="(min-width: 1000px) 30vw, (min-width: 640px) 46vw, 100vw" /></div>
+                <h3>{c.name}</h3>
+                <p class="client-meta">{c.countries} · {c.list.length} {c.list.length === 1 ? a.clients.projectOne : a.clients.projectMany}</p>
+                <ul class="client-projects">
+                  {c.list.map((pr) => <li><a href={localePath(lang, `/proyectos/${pr.slug}`)}>{projectText(pr, lang).title}</a></li>)}
+                </ul>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )}
+
+    <CtaEnd lang={lang} title={a.cta.title} />
+  </main>
+  <Footer lang={lang} />
+</Base>

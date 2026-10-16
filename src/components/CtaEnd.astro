@@ -1,0 +1,41 @@
+---
+import type { Lang } from '../config/site';
+import { site } from '../config/site';
+import { getT, localePath } from '../i18n';
+export interface Props {
+  lang: Lang;
+  title: string;
+  text?: string;
+}
+const { lang, title, text } = Astro.props;
+const r = getT(lang).common.ctaRoutes;
+---
+
+<section class="cta-end">
+  <div class="wrap cta-grid">
+    <h2 class="h-title" data-split>{title}</h2>
+    <ul class="cta-routes">
+      <li class="cta-route" data-batch>
+        <a href={localePath(lang, '/contacto')}>
+          <span class="cta-route-title">{r.project}</span>
+          <span class="cta-route-text">{text ?? r.projectText}</span>
+          <span class="cta-route-go" aria-hidden="true">→</span>
+        </a>
+      </li>
+      <li class="cta-route" data-batch>
+        <a href={`mailto:${site.hrEmail}`}>
+          <span class="cta-route-title">{r.careers}</span>
+          <span class="cta-route-text">{site.hrEmail}</span>
+          <span class="cta-route-go" aria-hidden="true">→</span>
+        </a>
+      </li>
+      <li class="cta-route" data-batch>
+        <a href={`tel:${site.phone.replace(/\s/g, '')}`}>
+          <span class="cta-route-title">{r.call}</span>
+          <span class="cta-route-text">{site.phone} · {site.email}</span>
+          <span class="cta-route-go" aria-hidden="true">→</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</section>

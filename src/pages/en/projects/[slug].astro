@@ -1,0 +1,14 @@
+---
+import ProjectDetail from '../../../views/ProjectDetail.astro';
+import { slugFor } from '../../../i18n';
+import { projects } from '../../../data/projects';
+
+export function getStaticPaths() {
+  const items = projects;
+  return items.map((project) => ({ params: { slug: slugFor('en', project.slug) }, props: { project } }));
+}
+const { project } = Astro.props;
+const lang = 'en';
+---
+
+<ProjectDetail lang={lang} project={project} />

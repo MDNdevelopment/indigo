@@ -1,0 +1,38 @@
+---
+import { worldMap, worldDots } from '../data/worldMap';
+export interface Place {
+  id: keyof typeof worldMap.points;
+  name: string;
+  text: string;
+  /** sede: el punto se destaca */
+  home?: boolean;
+}
+export interface Props {
+  aria: string;
+  places: Place[];
+}
+const { aria, places } = Astro.props;
+---
+
+<div class="worldmap" data-worldmap>
+  <svg class="worldmap-svg" viewBox={`0 0 ${worldMap.width} ${worldMap.height}`} role="img" aria-label={aria}>
+    <path class="worldmap-land" d={worldDots} data-map-land />
+    {places.map((p) => {
+      const [x, y] = worldMap.points[p.id];
+      return (
+        <g class:list={['pin', { 'pin-home': p.home }]} transform={`translate(${x} ${y})`} data-pin={p.id}>
+          <circle class="pin-ring" r="16"></circle>
+          <circle class="pin-dot" r="7"></circle>
+        </g>
+      );
+    })}
+  </svg>
+  <ul class="places">
+    {places.map((p) => (
+      <li class="place" data-place={p.id} tabindex="0">
+        <h3>{p.name}</h3>
+        <p>{p.text}</p>
+      </li>
+    ))}
+  </ul>
+</div>

@@ -1,0 +1,41 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import PageHero from '../components/PageHero.astro';
+import InfoBlocks from '../components/InfoBlocks.astro';
+import SiblingCards from '../components/SiblingCards.astro';
+import CtaEnd from '../components/CtaEnd.astro';
+import type { Lang } from '../config/site';
+import { getT, localePath } from '../i18n';
+import { qualityPages } from '../data/quality';
+import type { QualityPage } from '../data/quality';
+import { breadcrumbSchema } from '../lib/schema';
+
+export interface Props {
+  lang: Lang;
+  page: QualityPage;
+}
+const { lang, page } = Astro.props;
+const t = getT(lang);
+const x = page[lang];
+const path = `/calidad/${page.id}`;
+const others = qualityPages.filter((q) => q.id !== page.id).map((o) => ({ href: localePath(lang, `/calidad/${o.id}`), title: o[lang].title, text: o[lang].lead, image: o.image, pos: o.pos }));
+---
+
+<Base
+  title={x.title}
+  lang={lang}
+  description={x.lead}
+  path={path}
+  jsonLd={[breadcrumbSchema(lang, [{ name: t.common.home, path: '/' }, { name: t.footer.quality, path: '/calidad' }, { name: x.title, path }])]}
+>
+  <Nav lang={lang} path={path} dark />
+  <main id="main">
+    <PageHero title={x.title} intro={x.lead} image={page.image} pos={page.pos} />
+    <InfoBlocks blocks={x.blocks} />
+    <SiblingCards title={t.common.otherQuality} items={others} />
+    <CtaEnd lang={lang} title={t.qualityPage.cta.title} text={t.qualityPage.cta.text} />
+  </main>
+  <Footer lang={lang} />
+</Base>

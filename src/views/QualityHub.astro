@@ -1,0 +1,31 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import PageHero from '../components/PageHero.astro';
+import SiblingCards from '../components/SiblingCards.astro';
+import CtaEnd from '../components/CtaEnd.astro';
+import type { Lang } from '../config/site';
+import { getT, localePath } from '../i18n';
+import { photos } from '../data/photos';
+import { qualityPages } from '../data/quality';
+import { breadcrumbSchema } from '../lib/schema';
+
+export interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = getT(lang);
+const p = t.qualityPage;
+const items = qualityPages.map((q) => ({ href: localePath(lang, `/calidad/${q.id}`), title: q[lang].title, text: q[lang].lead, image: q.image, pos: q.pos }));
+---
+
+<Base title={t.footer.quality} lang={lang} description={p.meta} path="/calidad" jsonLd={[breadcrumbSchema(lang, [{ name: t.common.home, path: '/' }, { name: t.footer.quality, path: '/calidad' }])]}>
+  <Nav lang={lang} path="/calidad" dark />
+  <main id="main">
+    <PageHero title={p.title} intro={p.intro} image={photos.parque} pos="50% 50%" />
+    <SiblingCards title={p.listTitle} items={items} />
+    <CtaEnd lang={lang} title={p.cta.title} text={p.cta.text} />
+  </main>
+  <Footer lang={lang} />
+</Base>

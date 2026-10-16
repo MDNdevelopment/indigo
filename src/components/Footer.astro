@@ -1,0 +1,81 @@
+---
+import { site } from '../config/site';
+import type { Lang } from '../config/site';
+import { getT, localePath } from '../i18n';
+import { services } from '../data/services';
+import { sectors } from '../data/sectors';
+import { qualityPages } from '../data/quality';
+import logoWhite from '../assets/brand/logo-indigo-blanco.svg';
+export interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = getT(lang);
+const showCookies = site.analytics.consent === 'banner';
+const social = Object.entries(site.social).filter(([, v]) => v) as [string, string][];
+const socialLabel: Record<string, string> = { instagram: 'Instagram', linkedin: 'LinkedIn' };
+const pages = [
+  { label: t.nav.about, href: '/nosotros' },
+  { label: t.nav.services, href: '/servicios' },
+  { label: t.nav.sectors, href: '/sectores' },
+  { label: t.nav.projects, href: '/proyectos' },
+  { label: t.footer.quality, href: '/calidad' },
+  { label: t.nav.contact, href: '/contacto' },
+];
+const groups = [
+  { title: t.nav.services, items: services.map((x) => ({ label: x[lang].title, href: `/servicios/${x.id}` })) },
+  { title: t.nav.sectors, items: sectors.map((x) => ({ label: x[lang].title, href: `/sectores/${x.id}` })) },
+  { title: t.footer.quality, items: qualityPages.map((x) => ({ label: x[lang].title, href: `/calidad/${x.id}` })) },
+];
+---
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-about">
+        <img class="footer-logo" src={logoWhite.src} width="220" height="53" alt={site.name} loading="lazy" />
+        <p class="footer-tagline">{t.tagline}</p>
+      </div>
+      <div>
+        <h3>{t.footer.navTitle}</h3>
+        <ul>
+          {pages.map((p) => <li><a href={localePath(lang, p.href)}>{p.label}</a></li>)}
+        </ul>
+      </div>
+      {groups.map((g) => (
+        <div>
+          <h3>{g.title}</h3>
+          <ul>
+            {g.items.map((i) => <li><a href={localePath(lang, i.href)}>{i.label}</a></li>)}
+          </ul>
+        </div>
+      ))}
+      <div>
+        <h3>{t.footer.contactTitle}</h3>
+        <ul>
+          <li><a href={`tel:${site.phone.replace(/\s/g, '')}`}>{site.phone}</a></li>
+          <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+          <li>{site.address.street}, {site.address.city} {site.address.postalCode}</li>
+          <li><a href={`mailto:${site.hrEmail}`}>{t.footer.careers}</a></li>
+        </ul>
+      </div>
+      {social.length > 0 && (
+        <div>
+          <h3>{t.footer.followTitle}</h3>
+          <ul>
+            {social.map(([k, url]) => <li><a href={url} target="_blank" rel="noopener">{socialLabel[k] ?? k}</a></li>)}
+          </ul>
+        </div>
+      )}
+    </div>
+    <div class="footer-bottom">
+      <span>© {new Date().getFullYear()} {site.legalName} {t.common.legalRights} {t.footer.rif} {site.rif}</span>
+      <span class="footer-legal">
+        <a href={localePath(lang, '/politica-de-privacidad')}>{t.legal.privacyLink}</a>
+        <a href={localePath(lang, '/politica-de-cookies')}>{t.legal.cookiesLink}</a>
+        {showCookies && <button type="button" class="link-button" data-cookie-settings>{t.legal.cookieSettings}</button>}
+      </span>
+      {site.credit && <span>{t.common.credit}</span>}
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,13 @@
+---
+import AboutSection from '../../../views/AboutSection.astro';
+import { slugFor } from '../../../i18n';
+
+export function getStaticPaths() {
+  const sections = ['cultura', 'talento', 'clientes'] as const;
+  return sections.map((section) => ({ params: { section: slugFor('en', section) }, props: { section } }));
+}
+const { section } = Astro.props;
+const lang = 'en';
+---
+
+<AboutSection lang={lang} section={section} />

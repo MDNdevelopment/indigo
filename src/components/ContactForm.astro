@@ -1,0 +1,52 @@
+---
+import { site } from '../config/site';
+import type { Lang } from '../config/site';
+import { getT } from '../i18n';
+export interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const f = getT(lang).contactPage.form;
+const endpoint = site.formEndpoint;
+---
+
+<form
+  class="contact-form"
+  data-contact-form
+  action={endpoint ?? undefined}
+  method="post"
+  data-mailto={endpoint ? undefined : site.email}
+  data-subject={f.subject}
+>
+  <div class="field">
+    <label for="f-name">{f.name}</label>
+    <input id="f-name" name="name" type="text" data-label={f.name} required autocomplete="name" />
+  </div>
+  <div class="field">
+    <label for="f-company">{f.company}</label>
+    <input id="f-company" name="company" type="text" data-label={f.company} autocomplete="organization" />
+  </div>
+  <div class="field-row">
+    <div class="field">
+      <label for="f-email">{f.email}</label>
+      <input id="f-email" name="email" type="email" data-label={f.email} required autocomplete="email" />
+    </div>
+    <div class="field">
+      <label for="f-phone">{f.phone}</label>
+      <input id="f-phone" name="phone" type="tel" data-label={f.phone} autocomplete="tel" />
+    </div>
+  </div>
+  <div class="field">
+    <label for="f-message">{f.message}</label>
+    <textarea id="f-message" name="message" data-label={f.message} required></textarea>
+  </div>
+  <div class="hp" aria-hidden="true">
+    <label for="f-site">Website</label>
+    <input id="f-site" name="website" type="text" tabindex="-1" autocomplete="off" />
+  </div>
+  <button class="btn btn-solid" type="submit">{f.send}</button>
+  <p class="form-note" data-form-note hidden>{f.mailFallback}</p>
+  <noscript>
+    <p>{f.noscript} <a href={`mailto:${site.email}`}>{site.email}</a></p>
+  </noscript>
+</form>

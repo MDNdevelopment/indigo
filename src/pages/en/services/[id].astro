@@ -1,0 +1,14 @@
+---
+import ServiceDetail from '../../../views/ServiceDetail.astro';
+import { slugFor } from '../../../i18n';
+import { services } from '../../../data/services';
+
+export function getStaticPaths() {
+  const items = services;
+  return items.map((service) => ({ params: { id: slugFor('en', service.id) }, props: { service } }));
+}
+const { service } = Astro.props;
+const lang = 'en';
+---
+
+<ServiceDetail lang={lang} service={service} />

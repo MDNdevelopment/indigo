@@ -1,0 +1,55 @@
+---
+import Media from './Media.astro';
+import isotipo from '../assets/brand/isotipo.svg';
+export interface Slide {
+  label: string;
+  title: string;
+  text: string;
+  cta: string;
+  href: string;
+  image: ImageMetadata;
+  pos?: string;
+}
+export interface Props {
+  label: string;
+  slides: Slide[];
+}
+const { label, slides } = Astro.props;
+---
+
+<!-- Hero editorial dividido (variante libre; ver references/heros.md). Mitad de color de marca con el titular, mitad foto alta que cambia con una persiana vertical. -->
+<section class="edit" data-edit data-hero-root aria-roledescription="carrusel" aria-label={label} style={`--iso:url(${isotipo.src})`}>
+  <div class="edit-text">
+    <div class="edit-copies">
+      {slides.map((s, i) => (
+        <div class:list={['edit-copy', { 'is-current': i === 0 }]} data-edit-copy aria-hidden={i === 0 ? 'false' : 'true'} inert={i !== 0}>
+          {i === 0 ? (
+            <h1 class="edit-title" data-edit-title data-hero>{s.title}</h1>
+          ) : (
+            <h2 class="edit-title" data-edit-title>{s.title}</h2>
+          )}
+          <p class="edit-lead" data-edit-rest data-hero-rest>{s.text}</p>
+          <a class="btn btn-solid" href={s.href} data-edit-rest data-hero-rest>{s.cta}</a>
+        </div>
+      ))}
+    </div>
+    <ul class="edit-index">
+      {slides.map((s, i) => (
+        <li>
+          <button type="button" class="edit-tab" data-edit-tab aria-current={i === 0 ? 'true' : 'false'}>
+            <span class="sr-only">{s.label}</span>
+            <span class="edit-gem" aria-hidden="true"><i data-edit-bar></i></span>
+          </button>
+        </li>
+      ))}
+    </ul>
+  </div>
+  <div class="edit-photos">
+    {slides.map((s, i) => (
+      <div class:list={['edit-photo', { 'is-current': i === 0 }]} data-edit-photo>
+        <Media src={s.image} alt="" eager={i === 0} sizes="(min-width: 900px) 46vw, 100vw" pos={s.pos} />
+      </div>
+    ))}
+  </div>
+  <div class="edit-veil" aria-hidden="true"></div>
+</section>

@@ -1,0 +1,78 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import Media from '../components/Media.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaEnd from '../components/CtaEnd.astro';
+import BandList from '../components/BandList.astro';
+import type { Lang } from '../config/site';
+import { getT, localePath } from '../i18n';
+import { photos } from '../data/photos';
+import { projects, countryNames } from '../data/projects';
+import isotipo from '../assets/brand/isotipo.svg';
+import { breadcrumbSchema } from '../lib/schema';
+
+export interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = getT(lang);
+const a = t.about;
+const subs = [
+  { href: localePath(lang, '/nosotros/cultura'), ...a.sub.cultura, image: photos.estructura },
+  { href: localePath(lang, '/nosotros/talento'), ...a.sub.talento, image: photos.trabajoEquipo },
+  { href: localePath(lang, '/nosotros/clientes'), ...a.sub.clientes, image: photos.tanqueBlanco },
+];
+const countryIds = [...new Set(projects.map((p) => p.country))];
+const facts = [
+  { value: countryIds.length, suffix: '', label: a.facts.countries, detail: countryIds.map((c) => countryNames[c][lang]).join(', ') },
+  { value: projects.length, suffix: '', label: a.facts.projects, detail: '' },
+  { value: new Set(projects.map((p) => p.client).filter(Boolean)).size, suffix: '', label: a.facts.clients, detail: '' },
+  { value: 6, suffix: '', label: a.facts.disciplines, detail: '' },
+];
+---
+
+<Base title={t.nav.about} lang={lang} description={a.meta} path="/nosotros" jsonLd={[breadcrumbSchema(lang, [{ name: t.common.home, path: '/' }, { name: t.nav.about, path: '/nosotros' }])]}>
+  <Nav lang={lang} path="/nosotros" dark />
+  <main id="main">
+    <PageHero title={a.title} intro={a.intro} image={photos.zamora} pos="50% 55%" />
+
+    <section class="section" id="quienes-somos">
+      <div class="wrap who">
+        <div class="who-copy">
+          <p class="statement" data-lines>{a.who.statement}</p>
+          <p class="lead" data-fade>{a.who.text}</p>
+        </div>
+        <div class="who-photos" data-fade>
+          <div class="who-main"><Media src={photos.equipo} alt="" ratio="4 / 5" sizes="(min-width: 900px) 36vw, 100vw" /></div>
+          <div class="who-inset"><Media src={photos.torres} alt="" ratio="1 / 1" sizes="(min-width: 900px) 16vw, 40vw" /></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-dark facts-band" style={`--iso:url(${isotipo.src})`}>
+      <div class="wrap">
+      <ul class="facts">
+        {facts.map((f) => (
+          <li class="fact" data-batch>
+            <span class="fact-value"><span data-count={f.value} data-suffix={f.suffix}>{f.value}{f.suffix}</span></span>
+            <span class="fact-label">{f.label}</span>
+            {f.detail && <span class="fact-detail">{f.detail}</span>}
+          </li>
+        ))}
+      </ul>
+      </div>
+    </section>
+
+    <section class="section" id="mas">
+      <div class="wrap">
+        <h2 class="h-title" data-split>{a.sub.title}</h2>
+      </div>
+    </section>
+    <BandList items={subs} more={t.common.seeMore} />
+
+    <CtaEnd lang={lang} title={a.cta.title} />
+  </main>
+  <Footer lang={lang} />
+</Base>

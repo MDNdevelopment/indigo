@@ -1,0 +1,59 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import PageHero from '../components/PageHero.astro';
+import SiblingCards from '../components/SiblingCards.astro';
+import CtaEnd from '../components/CtaEnd.astro';
+import type { Lang } from '../config/site';
+import { getT, localePath } from '../i18n';
+import { services } from '../data/services';
+import type { Service } from '../data/services';
+import { breadcrumbSchema } from '../lib/schema';
+
+export interface Props {
+  lang: Lang;
+  service: Service;
+}
+const { lang, service } = Astro.props;
+const t = getT(lang);
+const p = t.servicesPage;
+const x = service[lang];
+const path = `/servicios/${service.id}`;
+const others = services.filter((sv) => sv.id !== service.id).map((o) => ({ href: localePath(lang, `/servicios/${o.id}`), title: o[lang].title, text: o[lang].lead, image: o.image, pos: o.pos }));
+---
+
+<Base
+  title={x.title}
+  lang={lang}
+  description={x.lead}
+  path={path}
+  jsonLd={[breadcrumbSchema(lang, [{ name: t.common.home, path: '/' }, { name: t.nav.services, path: '/servicios' }, { name: x.title, path }])]}
+>
+  <Nav lang={lang} path={path} dark />
+  <main id="main">
+    <PageHero title={x.title} intro={x.lead} image={service.image} pos={service.pos} />
+
+    <section class="section" id="alcance">
+      <div class="wrap">
+        <p class="svc-big" data-fade>{x.text}</p>
+      </div>
+    </section>
+
+    {x.items && (
+      <section class="section section-soft">
+        <div class="wrap">
+          <h2 class="svc-scope-title" data-split>{p.includes}</h2>
+          <ul class="svc-checks">
+            {x.items.map((it) => <li data-batch>{it}</li>)}
+          </ul>
+        </div>
+      </section>
+    )}
+
+    <SiblingCards title={p.others} items={others} />
+
+    <CtaEnd lang={lang} title={p.cta.title} text={p.cta.text} />
+  </main>
+  <Footer lang={lang} />
+</Base>

@@ -1,0 +1,43 @@
+---
+import { site } from '../config/site';
+import type { Lang } from '../config/site';
+import { getT, langs, localePath } from '../i18n';
+export interface Props {
+  title: string;
+  lang: Lang;
+  description?: string;
+  /** ruta sin idioma, p. ej. /nosotros */
+  path?: string;
+  image?: string;
+  noindex?: boolean;
+}
+const t = (l: Lang) => getT(l);
+const { title, lang, description = t(lang).description, path = '/', image = '/og-default.jpg', noindex = false } = Astro.props;
+const root = (Astro.site?.toString() ?? site.url).replace(/\/$/, '');
+const abs = (p: string) => new URL(p, root + '/').toString();
+const canonical = abs(localePath(lang, path));
+const imageUrl = abs(image);
+const full = path === '/' ? title : `${title} · ${site.name}`;
+const alternates = langs.map((l) => ({ lang: l, href: abs(localePath(l, path)) }));
+---
+
+<title>{full}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+{!noindex && alternates.map((a) => <link rel="alternate" hreflang={a.lang} href={a.href} />)}
+{!noindex && <link rel="alternate" hreflang="x-default" href={alternates[0].href} />}
+<meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large'} />
+{site.searchConsole.verification && <meta name="google-site-verification" content={site.searchConsole.verification} />}
+<meta name="theme-color" content="#141d3c" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content={site.name} />
+<meta property="og:title" content={full} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={imageUrl} />
+<meta property="og:locale" content={t(lang).ogLocale} />
+{langs.filter((l) => l !== lang).map((l) => <meta property="og:locale:alternate" content={t(l).ogLocale} />)}
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={full} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={imageUrl} />

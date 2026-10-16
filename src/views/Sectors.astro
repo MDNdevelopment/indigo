@@ -1,0 +1,31 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import PageHero from '../components/PageHero.astro';
+import BandList from '../components/BandList.astro';
+import CtaEnd from '../components/CtaEnd.astro';
+import type { Lang } from '../config/site';
+import { getT, localePath } from '../i18n';
+import { photos } from '../data/photos';
+import { sectors } from '../data/sectors';
+import { breadcrumbSchema } from '../lib/schema';
+
+export interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = getT(lang);
+const p = t.sectorsPage;
+const items = sectors.map((s) => ({ href: localePath(lang, `/sectores/${s.id}`), title: s[lang].title, text: s[lang].short, image: s.image, pos: s.pos }));
+---
+
+<Base title={t.nav.sectors} lang={lang} description={p.meta} path="/sectores" jsonLd={[breadcrumbSchema(lang, [{ name: t.common.home, path: '/' }, { name: t.nav.sectors, path: '/sectores' }])]}>
+  <Nav lang={lang} path="/sectores" dark />
+  <main id="main">
+    <PageHero title={p.title} intro={p.intro} image={photos.senkata} pos="50% 50%" />
+    <BandList items={items} more={t.common.seeMore} />
+    <CtaEnd lang={lang} title={p.cta.title} text={p.cta.text} />
+  </main>
+  <Footer lang={lang} />
+</Base>

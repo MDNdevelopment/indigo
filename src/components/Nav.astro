@@ -1,0 +1,127 @@
+---
+import { site } from '../config/site';
+import type { Lang } from '../config/site';
+import { alternates, getT, langs, localePath } from '../i18n';
+import { services, serviceText } from '../data/services';
+import { sectors } from '../data/sectors';
+import { qualityPages, qualityText } from '../data/quality';
+import { countryNames, countrySlugs } from '../data/projects';
+import type { CountryId } from '../data/projects';
+import logoColor from '../assets/brand/logo-indigo.svg';
+import isotipo from '../assets/brand/isotipo.svg';
+import logoWhite from '../assets/brand/logo-indigo-blanco.svg';
+export interface Props {
+  lang: Lang;
+  /** ruta sin idioma de la página actual, para el selector de idioma */
+  path?: string;
+  /** true cuando la página abre con foto oscura: el header arranca en blanco */
+  dark?: boolean;
+}
+const { lang, path = '/', dark = false } = Astro.props;
+const t = getT(lang);
+const other = langs.find((l) => l !== lang)!;
+const alt = alternates(path);
+interface NavItem { label: string; href: string; children?: { label: string; href: string }[] }
+const sub = t.about.sub;
+const countryIds = Object.keys(countrySlugs) as CountryId[];
+const links: NavItem[] = [
+  {
+    label: t.nav.about,
+    href: '/nosotros',
+    children: (['cultura', 'talento', 'clientes'] as const).map((id) => ({ label: sub[id].title, href: `/nosotros/${id}` })),
+  },
+  { label: t.nav.services, href: '/servicios', children: services.map((s) => ({ label: serviceText(s, lang).title, href: `/servicios/${s.id}` })) },
+  { label: t.nav.sectors, href: '/sectores', children: sectors.map((s) => ({ label: s[lang].title, href: `/sectores/${s.id}` })) },
+  {
+    label: t.nav.projects,
+    href: '/proyectos',
+    children: [{ label: t.nav.allProjects, href: '/proyectos' }, ...countryIds.map((c) => ({ label: countryNames[c][lang], href: `/proyectos/pais/${countrySlugs[c]}` }))],
+  },
+  { label: t.nav.quality, href: '/calidad', children: qualityPages.map((q) => ({ label: qualityText(q, lang).title, href: `/calidad/${q.id}` })) },
+];
+const here = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isCurrent = (href: string) => {
+  const full = localePath(lang, href);
+  return here === full || here.startsWith(full + '/');
+};
+---
+
+<a class="skip-link" href="#main">{t.common.skip}</a>
+<header class="nav" data-nav data-theme={dark ? 'dark' : 'light'}>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href={localePath(lang, '/')} aria-label={t.common.brandHome}>
+      <img class="nav-logo nav-logo-white" src={logoWhite.src} width="168" height="40" alt="" />
+      <img class="nav-logo nav-logo-color" src={logoColor.src} width="168" height="40" alt="" />
+    </a>
+    <nav aria-label={t.common.mainNav}>
+      <ul class="nav-links">
+        {links.map((l) => (
+          <li class="nav-item">
+            <a href={localePath(lang, l.href)} aria-current={isCurrent(l.href) ? 'page' : undefined}>{l.label}</a>
+            {l.children && (
+              <ul class="nav-sub">
+                {l.children.map((c) => <li><a href={localePath(lang, c.href)}>{c.label}</a></li>)}
+              </ul>
+            )}
+          </li>
+        ))}
+      </ul>
+    </nav>
+    <div class="nav-end">
+      <a class="nav-lang" href={alt[other]} hreflang={other} lang={other} aria-label={t.common.langSwitchLabel} data-astro-reload>{t.common.langSwitch}</a>
+      <a class="btn btn-solid nav-cta" href={localePath(lang, '/contacto')}>{t.nav.cta}</a>
+      <button class="nav-burger" type="button" aria-expanded="false" aria-controls="menu" aria-label={t.common.openMenu} data-menu-toggle>
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="menu" id="menu" hidden data-menu role="dialog" aria-modal="true" aria-label={t.common.mainNav}>
+  <div class="menu-scrim" data-menu-close></div>
+  <div class="menu-panel" data-menu-panel>
+    <img class="menu-mark" src={isotipo.src} width="240" height="240" alt="" aria-hidden="true" />
+    <div class="menu-head">
+      <a class="menu-brand" href={localePath(lang, '/')} aria-label={t.common.brandHome}>
+        <img src={logoWhite.src} width="168" height="40" alt="" />
+      </a>
+      <button class="menu-close" type="button" aria-label={t.common.closeMenu} data-menu-close>
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" /></svg>
+      </button>
+    </div>
+    <ul class="menu-links">
+      {links.map((l, i) => (
+        <li class="menu-link" data-menu-link>
+          <div class="menu-row">
+            <a href={localePath(lang, l.href)} aria-current={isCurrent(l.href) ? 'page' : undefined}>{l.label}</a>
+            {l.children && (
+              <button class="menu-more" type="button" aria-expanded="false" aria-controls={`menu-sub-${i}`} aria-label={`${t.common.expand}: ${l.label}`} data-menu-more>
+                <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" /></svg>
+              </button>
+            )}
+          </div>
+          {l.children && (
+            <div class="menu-sub-wrap" id={`menu-sub-${i}`}>
+              <ul class="menu-sub">
+                {l.children.map((c) => <li><a href={localePath(lang, c.href)}>{c.label}</a></li>)}
+              </ul>
+            </div>
+          )}
+        </li>
+      ))}
+      <li class="menu-link" data-menu-link><div class="menu-row"><a href={alt[other]} hreflang={other} lang={other} data-astro-reload>{other === 'en' ? 'English' : 'Español'}</a></div></li>
+    </ul>
+    <div class="menu-foot" data-menu-link>
+      <a class="btn btn-solid" href={localePath(lang, '/contacto')}>{t.nav.cta}</a>
+      <a href={`tel:${site.phone.replace(/\s/g, '')}`}>{site.phone}</a>
+      <a href={`mailto:${site.email}`}>{site.email}</a>
+    </div>
+  </div>
+</div>
+
+<noscript>
+  <style>
+    .nav-links { display: flex !important; flex-wrap: wrap; }
+    .nav-burger { display: none !important; }
+  </style>
+</noscript>

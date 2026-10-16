@@ -1,0 +1,13 @@
+---
+import SectorDetail from '../../views/SectorDetail.astro';
+import { sectors } from '../../data/sectors';
+
+export function getStaticPaths() {
+  const items = sectors;
+  return items.map((sector) => ({ params: { id: sector.id }, props: { sector } }));
+}
+const { sector } = Astro.props;
+const lang = 'es';
+---
+
+<SectorDetail lang={lang} sector={sector} />

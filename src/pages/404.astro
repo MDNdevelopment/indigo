@@ -1,0 +1,24 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import PageHero from '../components/PageHero.astro';
+import { getT, localePath } from '../i18n';
+import { photos } from '../data/photos';
+
+const lang = 'es';
+const t = getT(lang);
+---
+
+<Base title={t.notFound.title} lang={lang} path="/404" noindex>
+  <Nav lang={lang} path="/" dark />
+  <main id="main">
+    <PageHero title={t.notFound.title} intro={t.notFound.text} image={photos.viaCarretera} />
+    <section class="section">
+      <div class="wrap">
+        <a class="btn btn-solid" href={localePath(lang, '/')}>{t.notFound.back}</a>
+      </div>
+    </section>
+  </main>
+  <Footer lang={lang} />
+</Base>

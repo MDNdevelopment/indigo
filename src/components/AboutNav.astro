@@ -1,0 +1,25 @@
+---
+import type { Lang } from '../config/site';
+import { getT, localePath } from '../i18n';
+export interface Props {
+  lang: Lang;
+  current?: 'cultura' | 'talento' | 'clientes';
+}
+const { lang, current } = Astro.props;
+const t = getT(lang);
+const sub = t.about.sub;
+const items = [
+  { id: undefined, label: t.nav.about, href: '/nosotros' },
+  { id: 'cultura', label: sub.cultura.title, href: '/nosotros/cultura' },
+  { id: 'talento', label: sub.talento.title, href: '/nosotros/talento' },
+  { id: 'clientes', label: sub.clientes.title, href: '/nosotros/clientes' },
+];
+---
+
+<nav class="about-nav" aria-label={t.nav.about}>
+  <ul>
+    {items.map((i) => (
+      <li><a href={localePath(lang, i.href)} aria-current={i.id === current && i.id ? 'page' : undefined}>{i.label}</a></li>
+    ))}
+  </ul>
+</nav>

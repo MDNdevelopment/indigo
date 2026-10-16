@@ -1,0 +1,23 @@
+---
+import type { InfoBlock } from '../data/quality';
+export interface Props {
+  blocks: InfoBlock[];
+}
+const { blocks } = Astro.props;
+---
+
+{blocks.map((b, i) => (
+  <section class:list={['section', 'policy', { 'section-soft': i % 2 === 1 }]} id={b.id}>
+    <div class="wrap policy-grid">
+      <h2 class="h-title" data-split>{b.title}</h2>
+      <div class="policy-text">
+        {b.paragraphs.map((para) => <p class="lead" data-fade>{para}</p>)}
+        {b.items && (
+          <ul class="detail-list">
+            {b.items.map((it) => <li data-batch>{it}</li>)}
+          </ul>
+        )}
+      </div>
+    </div>
+  </section>
+))}

@@ -4,6 +4,7 @@ import type { Lang } from '../config/site';
 import { alternates, getT, langs, localePath } from '../i18n';
 import { services, serviceText } from '../data/services';
 import { sectors } from '../data/sectors';
+import { subsectors } from '../data/subsectors';
 import { qualityPages, qualityText } from '../data/quality';
 import { countryNames, countrySlugs } from '../data/projects';
 import type { CountryId } from '../data/projects';
@@ -21,7 +22,7 @@ const { lang, path = '/', dark = false } = Astro.props;
 const t = getT(lang);
 const other = langs.find((l) => l !== lang)!;
 const alt = alternates(path);
-interface NavItem { label: string; href: string; children?: { label: string; href: string }[] }
+interface NavItem { label: string; href: string; children?: { label: string; href: string; nested?: boolean }[] }
 const sub = t.about.sub;
 const countryIds = Object.keys(countrySlugs) as CountryId[];
 const links: NavItem[] = [
@@ -31,7 +32,11 @@ const links: NavItem[] = [
     children: (['cultura', 'talento', 'clientes'] as const).map((id) => ({ label: sub[id].title, href: `/nosotros/${id}` })),
   },
   { label: t.nav.services, href: '/servicios', children: services.map((s) => ({ label: serviceText(s, lang).title, href: `/servicios/${s.id}` })) },
-  { label: t.nav.sectors, href: '/sectores', children: sectors.map((s) => ({ label: s[lang].title, href: `/sectores/${s.id}` })) },
+  { label: t.nav.sectors, href: '/sectores', children: sectors.flatMap((s) => [
+      { label: s[lang].title, href: `/sectores/${s.id}` },
+      ...subsectors.filter((o) => o.parent === s.id).map((o) => ({ label: o[lang].title, href: `/sectores/${o.parent}/${o.id}`, nested: true })),
+    ]),
+  },
   {
     label: t.nav.projects,
     href: '/proyectos',
@@ -60,7 +65,7 @@ const isCurrent = (href: string) => {
             <a href={localePath(lang, l.href)} aria-current={isCurrent(l.href) ? 'page' : undefined}>{l.label}</a>
             {l.children && (
               <ul class="nav-sub">
-                {l.children.map((c) => <li><a href={localePath(lang, c.href)}>{c.label}</a></li>)}
+                {l.children.map((c) => <li class:list={{ 'is-nested': c.nested }}><a href={localePath(lang, c.href)}>{c.label}</a></li>)}
               </ul>
             )}
           </li>
@@ -103,7 +108,7 @@ const isCurrent = (href: string) => {
           {l.children && (
             <div class="menu-sub-wrap" id={`menu-sub-${i}`}>
               <ul class="menu-sub">
-                {l.children.map((c) => <li><a href={localePath(lang, c.href)}>{c.label}</a></li>)}
+                {l.children.map((c) => <li class:list={{ 'is-nested': c.nested }}><a href={localePath(lang, c.href)}>{c.label}</a></li>)}
               </ul>
             </div>
           )}

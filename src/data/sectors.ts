@@ -13,7 +13,7 @@ export interface Sector {
   image: ImageMetadata;
   pos?: string;
   /** Video corporativo del sector (public/videos). */
-  video?: { src: string; poster: ImageMetadata };
+  video?: { src: string; poster: ImageMetadata; title: { es: string; en: string } };
   es: { title: string; short: string; lead: string; groups: SectorGroup[] };
   en: { title: string; short: string; lead: string; groups: SectorGroup[] };
 }
@@ -23,7 +23,7 @@ export const sectors: Sector[] = [
   {
     id: 'energia',
     image: photos.camejo,
-    video: { src: '/videos/energia.mp4', poster: videoEnergia },
+    video: { src: '/videos/energia.mp4', poster: videoEnergia, title: { es: 'Nuestro trabajo en energía', en: 'Our work in energy' } },
     es: {
       title: 'Energía',
       short: 'Centrales termoeléctricas en ciclo simple y combinado, con manejo de combustible dual.',
@@ -136,7 +136,7 @@ export const sectors: Sector[] = [
   {
     id: 'petroleo-gas',
     image: photos.tanqueYpfb,
-    video: { src: '/videos/petroleo-gas.mp4', poster: videoPetroleoGas },
+    video: { src: '/videos/petroleo-gas.mp4', poster: videoPetroleoGas, title: { es: 'Nuestro trabajo en petróleo y gas', en: 'Our work in oil and gas' } },
     es: {
       title: 'Petróleo y Gas',
       short: 'Del pozo a la refinería: producción, transporte, almacenamiento, distribución y procesamiento.',

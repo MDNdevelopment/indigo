@@ -29,7 +29,6 @@ export const en = {
     allSectors: 'See all sectors',
     relatedProjects: 'Projects in this sector',
     otherSectors: 'Other sectors',
-    watchVideo: 'Watch the video',
     inThisSector: 'In this sector',
     otherQuality: 'More on quality, safety and environment',
     otherServices: 'Other services',

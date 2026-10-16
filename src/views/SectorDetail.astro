@@ -69,7 +69,7 @@ const related = projects
     {sector.video && (
       <section class="section sector-video">
         <div class="wrap">
-          <h2 class="h-title" data-split>{t.common.watchVideo}</h2>
+          <h2 class="h-title" data-split>{sector.video.title[lang]}</h2>
           <video controls preload="none" playsinline poster={sector.video.poster.src} aria-label={x.title}>
             <source src={sector.video.src} type="video/mp4" />
           </video>

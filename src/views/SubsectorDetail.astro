@@ -1,0 +1,92 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import Media from '../components/Media.astro';
+import PageHero from '../components/PageHero.astro';
+import BandList from '../components/BandList.astro';
+import SiblingCards from '../components/SiblingCards.astro';
+import CtaEnd from '../components/CtaEnd.astro';
+import type { Lang } from '../config/site';
+import { getT, localePath } from '../i18n';
+import { sectors } from '../data/sectors';
+import { subsectors } from '../data/subsectors';
+import type { Subsector } from '../data/subsectors';
+import { projects, projectText } from '../data/projects';
+import { breadcrumbSchema } from '../lib/schema';
+
+export interface Props {
+  lang: Lang;
+  sub: Subsector;
+}
+const { lang, sub } = Astro.props;
+const t = getT(lang);
+const x = sub[lang];
+const parent = sectors.find((s) => s.id === sub.parent)!;
+const path = `/sectores/${sub.parent}/${sub.id}`;
+const others = [
+  { href: localePath(lang, `/sectores/${parent.id}`), title: parent[lang].title, text: parent[lang].short, image: parent.image, pos: parent.pos },
+  ...subsectors
+    .filter((s) => s.id !== sub.id)
+    .map((o) => ({ href: localePath(lang, `/sectores/${o.parent}/${o.id}`), title: o[lang].title, text: o[lang].short, image: o.image, pos: o.pos })),
+];
+const related = projects
+  .filter((pr) => sub.projects.includes(pr.slug))
+  .map((pr) => ({ href: localePath(lang, `/proyectos/${pr.slug}`), title: projectText(pr, lang).title, text: projectText(pr, lang).place, image: pr.image, pos: pr.pos }));
+---
+
+<Base
+  title={x.title}
+  lang={lang}
+  description={x.short}
+  path={path}
+  jsonLd={[
+    breadcrumbSchema(lang, [
+      { name: t.common.home, path: '/' },
+      { name: t.nav.sectors, path: '/sectores' },
+      { name: parent[lang].title, path: `/sectores/${parent.id}` },
+      { name: x.title, path },
+    ]),
+  ]}
+>
+  <Nav lang={lang} path={path} dark />
+  <main id="main">
+    <PageHero title={x.title} intro={x.lead} image={sub.image} pos={sub.pos} />
+
+    <section class="section sector">
+      <div class="wrap">
+        <div class="sector-layout has-photo">
+          <div class="sector-side">
+            <Media src={sub.image} alt="" ratio="4 / 5" pos={sub.pos} sizes="(min-width: 900px) 34vw, 100vw" />
+          </div>
+          <div class="sector-groups">
+            {x.groups.map((g) => (
+              <div class="sector-group" data-batch>
+                <h2>{g.title}</h2>
+                <ul>
+                  {g.items.map((it) => <li>{it}</li>)}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {related.length > 0 && (
+      <>
+        <section class="section related-head" id="proyectos">
+          <div class="wrap">
+            <h2 class="h-title" data-split>{t.common.relatedProjects}</h2>
+          </div>
+        </section>
+        <BandList items={related} more={t.common.seeMore} />
+      </>
+    )}
+
+    <SiblingCards title={t.common.inThisSector} items={others} />
+
+    <CtaEnd lang={lang} title={t.sectorsPage.cta.title} text={t.sectorsPage.cta.text} />
+  </main>
+  <Footer lang={lang} />
+</Base>

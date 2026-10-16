@@ -11,6 +11,7 @@ import type { Lang } from '../config/site';
 import { getT, localePath } from '../i18n';
 import { sectors } from '../data/sectors';
 import type { Sector } from '../data/sectors';
+import { subsectors } from '../data/subsectors';
 import { projects, projectText } from '../data/projects';
 import { breadcrumbSchema } from '../lib/schema';
 
@@ -24,6 +25,9 @@ const p = t.sectorsPage;
 const x = sector[lang];
 const path = `/sectores/${sector.id}`;
 const others = sectors.filter((s) => s.id !== sector.id).map((o) => ({ href: localePath(lang, `/sectores/${o.id}`), title: o[lang].title, text: o[lang].short, image: o.image, pos: o.pos }));
+const subs = subsectors
+  .filter((o) => o.parent === sector.id)
+  .map((o) => ({ href: localePath(lang, `/sectores/${o.parent}/${o.id}`), title: o[lang].title, text: o[lang].short, image: o.image, pos: o.pos }));
 const related = projects
   .filter((pr) => pr.sector === sector.id)
   .map((pr) => ({ href: localePath(lang, `/proyectos/${pr.slug}`), title: projectText(pr, lang).title, text: projectText(pr, lang).place, image: pr.image, pos: pr.pos }));
@@ -61,6 +65,19 @@ const related = projects
         </div>
       </div>
     </section>
+
+    {sector.video && (
+      <section class="section sector-video">
+        <div class="wrap">
+          <h2 class="h-title" data-split>{t.common.watchVideo}</h2>
+          <video controls preload="none" playsinline poster={sector.video.poster.src} aria-label={x.title}>
+            <source src={sector.video.src} type="video/mp4" />
+          </video>
+        </div>
+      </section>
+    )}
+
+    {subs.length > 0 && <SiblingCards title={t.common.inThisSector} items={subs} />}
 
     {related.length > 0 && (
       <>

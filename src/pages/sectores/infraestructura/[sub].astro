@@ -1,0 +1,11 @@
+---
+import SubsectorDetail from '../../../views/SubsectorDetail.astro';
+import { subsectors } from '../../../data/subsectors';
+
+export function getStaticPaths() {
+  return subsectors.map((sub) => ({ params: { sub: sub.id }, props: { sub } }));
+}
+const { sub } = Astro.props;
+---
+
+<SubsectorDetail lang="es" sub={sub} />

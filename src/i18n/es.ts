@@ -28,6 +28,8 @@ export const es = {
     allSectors: 'Ver todos los sectores',
     relatedProjects: 'Proyectos en este sector',
     otherSectors: 'Otros sectores',
+    watchVideo: 'Mira el video',
+    inThisSector: 'En este sector',
     otherQuality: 'Más sobre calidad, seguridad y ambiente',
     otherServices: 'Otros servicios',
     nextProject: 'Siguiente proyecto',

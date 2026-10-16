@@ -1,4 +1,6 @@
 import { photos } from './photos';
+import videoEnergia from '../assets/photos/video-energia.jpg';
+import videoPetroleoGas from '../assets/photos/video-petroleo-gas.jpg';
 
 export type SectorId = 'energia' | 'petroleo-gas' | 'agua' | 'infraestructura';
 
@@ -10,6 +12,8 @@ export interface Sector {
   id: SectorId;
   image: ImageMetadata;
   pos?: string;
+  /** Video corporativo del sector (public/videos). */
+  video?: { src: string; poster: ImageMetadata };
   es: { title: string; short: string; lead: string; groups: SectorGroup[] };
   en: { title: string; short: string; lead: string; groups: SectorGroup[] };
 }
@@ -19,6 +23,7 @@ export const sectors: Sector[] = [
   {
     id: 'energia',
     image: photos.camejo,
+    video: { src: '/videos/energia.mp4', poster: videoEnergia },
     es: {
       title: 'Energía',
       short: 'Centrales termoeléctricas en ciclo simple y combinado, con manejo de combustible dual.',
@@ -131,6 +136,7 @@ export const sectors: Sector[] = [
   {
     id: 'petroleo-gas',
     image: photos.tanqueYpfb,
+    video: { src: '/videos/petroleo-gas.mp4', poster: videoPetroleoGas },
     es: {
       title: 'Petróleo y Gas',
       short: 'Del pozo a la refinería: producción, transporte, almacenamiento, distribución y procesamiento.',

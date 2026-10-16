@@ -1,0 +1,12 @@
+---
+import SubsectorDetail from '../../../../views/SubsectorDetail.astro';
+import { slugFor } from '../../../../i18n';
+import { subsectors } from '../../../../data/subsectors';
+
+export function getStaticPaths() {
+  return subsectors.map((sub) => ({ params: { sub: slugFor('en', sub.id) }, props: { sub } }));
+}
+const { sub } = Astro.props;
+---
+
+<SubsectorDetail lang="en" sub={sub} />

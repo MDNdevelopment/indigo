@@ -2550,3 +2550,14 @@ a {
   margin-top: 3rem;
   font-size: 0.85rem;
 }
+
+/* ---------- Video de sector ---------- */
+.sector-video video {
+  display: block;
+  width: 100%;
+  max-width: 62rem;
+  margin-top: 2rem;
+  aspect-ratio: 16 / 9;
+  background: var(--color-dark);
+  border-radius: 4px;
+}

@@ -30,13 +30,13 @@ const p = t.contactPage;
         </div>
         <div class="contact-info">
           <h2 class="contact-big" data-split>{p.info.business}</h2>
-          <ul class="contact-data" data-fade data-fade-delay="150">
+          <ul class="contact-data" data-shutter>
             <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
             <li><a href={`tel:${site.phone.replace(/\s/g, '')}`}>{site.phone}</a></li>
             <li>{site.address.street}, {site.address.city} {site.address.postalCode}</li>
           </ul>
           <h3 class="contact-sub" data-fade>{p.info.careers}</h3>
-          <ul class="contact-data" data-fade>
+          <ul class="contact-data" data-shutter>
             <li><a href={`mailto:${site.hrEmail}`}>{site.hrEmail}</a></li>
           </ul>
         </div>

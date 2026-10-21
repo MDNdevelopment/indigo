@@ -50,7 +50,7 @@ const facts = [
 
     <section class="section">
       <div class="wrap project-detail">
-        <dl class="facts" data-fade>
+        <dl class="facts" data-cols>
           {facts.map((r) => (
             <div class="fact">
               <dt>{r.k}</dt>
@@ -77,7 +77,7 @@ const facts = [
 
     <section class="section section-dark next-project">
       <div class="wrap">
-        <p class="lead">{t.common.nextProject}</p>
+        <p class="lead" data-lines>{t.common.nextProject}</p>
         <a class="next-link" href={L(`/proyectos/${next.slug}`)} data-split>{nextText.title} →</a>
         <p class="next-back"><a class="link-arrow" href={L('/proyectos')}>{t.common.backToProjects}</a></p>
       </div>

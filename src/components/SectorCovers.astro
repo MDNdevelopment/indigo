@@ -1,0 +1,43 @@
+---
+import Media from './Media.astro';
+export interface Item {
+  href: string;
+  title: string;
+  short: string;
+  image: ImageMetadata;
+  pos?: string;
+}
+export interface Props {
+  items: Item[];
+  more: string;
+}
+const { items, more } = Astro.props;
+---
+
+<!-- Portadas verticales en duotono: cuatro piezas iguales, con título, línea de acento, una frase y el enlace al sector. -->
+<section class="section covers-sec">
+  <div class="wrap">
+    <ul class="covers" data-cover>
+      {items.map((it) => (
+        <li class="cover">
+          <a class="cover-link" href={it.href}>
+            <div class="cover-media shade">
+              <Media
+                src={it.image}
+                alt=""
+                pos={it.pos}
+                sizes="(min-width: 901px) 24vw, (min-width: 560px) 46vw, 100vw"
+              />
+            </div>
+            <div class="cover-copy">
+              <h2 class="cover-title" data-cover-title>{it.title}</h2>
+              <span class="hairline cover-rule" data-cover-rule aria-hidden="true"></span>
+              <p class="cover-short">{it.short}</p>
+              <span class="cover-go">{more} <span aria-hidden="true">&#8594;</span></span>
+            </div>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

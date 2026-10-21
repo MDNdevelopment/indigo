@@ -14,22 +14,22 @@ const r = getT(lang).common.ctaRoutes;
 <section class="cta-end">
   <div class="wrap cta-grid">
     <h2 class="h-title" data-split>{title}</h2>
-    <ul class="cta-routes">
-      <li class="cta-route" data-batch>
+    <ul class="cta-routes" data-flip>
+      <li class="cta-route">
         <a href={localePath(lang, '/contacto')}>
           <span class="cta-route-title">{r.project}</span>
           <span class="cta-route-text">{text ?? r.projectText}</span>
           <span class="cta-route-go" aria-hidden="true">→</span>
         </a>
       </li>
-      <li class="cta-route" data-batch>
+      <li class="cta-route">
         <a href={`mailto:${site.hrEmail}`}>
           <span class="cta-route-title">{r.careers}</span>
           <span class="cta-route-text">{site.hrEmail}</span>
           <span class="cta-route-go" aria-hidden="true">→</span>
         </a>
       </li>
-      <li class="cta-route" data-batch>
+      <li class="cta-route">
         <a href={`tel:${site.phone.replace(/\s/g, '')}`}>
           <span class="cta-route-title">{r.call}</span>
           <span class="cta-route-text">{site.phone} · {site.email}</span>

@@ -57,7 +57,7 @@ const clientCards = [...byClient.entries()]
               <p class="lead" data-fade>{a.culture.text}</p>
             </div>
             <div class="mv">
-              <article class="mv-card mv-mission" data-batch>
+              <article class="mv-card mv-mission" data-shutter>
                 <h3>{a.culture.mission.title}</h3>
                 <p>{a.culture.mission.text}</p>
               </article>
@@ -74,9 +74,9 @@ const clientCards = [...byClient.entries()]
         <section class="section section-soft" id="valores">
           <div class="wrap">
             <h2 class="h-title" data-split>{a.values.title}</h2>
-            <ul class="values">
+            <ul class="values" data-cols>
               {a.values.items.map((v, i) => (
-                <li class="value" data-fade>
+                <li class="value">
                   <div class="value-photo"><Media src={valuePhotos[i]} alt="" ratio="16 / 10" sizes="(min-width: 900px) 40vw, 100vw" /></div>
                   <h3>{v.title}</h3>
                   <p>{v.text}</p>
@@ -112,12 +112,12 @@ const clientCards = [...byClient.entries()]
               <h2 class="team-title" data-split>{a.talent.team.title}</h2>
               <p class="lead">{a.talent.team.text}</p>
             </div>
-            <div class="team-lists">
-              <div data-batch>
+            <div class="team-lists" data-shutter>
+              <div>
                 <h3>{a.talent.team.engTitle}</h3>
                 <ul>{a.talent.team.eng.map((d) => <li>{d}</li>)}</ul>
               </div>
-              <div data-batch>
+              <div>
                 <h3>{a.talent.team.supportTitle}</h3>
                 <ul>{a.talent.team.support.map((d) => <li>{d}</li>)}</ul>
               </div>

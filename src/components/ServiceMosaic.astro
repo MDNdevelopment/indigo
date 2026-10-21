@@ -1,0 +1,53 @@
+---
+import Media from './Media.astro';
+export interface Item {
+  href: string;
+  title: string;
+  lead: string;
+  /** Solo la celda grande muestra alcances; Tecnología no tiene items. */
+  scope?: string[];
+  image: ImageMetadata;
+  pos?: string;
+}
+export interface Props {
+  items: Item[];
+  more: string;
+}
+const { items, more } = Astro.props;
+---
+
+<!-- Mosaico asimétrico: una celda grande y cuatro chicas, foto en duotono azul y esquinas rectas (nada del diagonal del header). -->
+<section class="section mosaic-sec">
+  <div class="wrap">
+    <ul class="mosaic" data-cols>
+      {items.map((it, i) => (
+        <li class:list={['bento', { 'is-lead': i === 0 }]}>
+          <a class="bento-link" href={it.href}>
+            <div class="bento-media shade">
+              <Media
+                src={it.image}
+                alt=""
+                pos={it.pos}
+                sizes={i === 0 ? '(min-width: 901px) 58vw, 100vw' : '(min-width: 901px) 29vw, 100vw'}
+              />
+            </div>
+            <div class="bento-copy">
+              <h2 class="bento-title">{it.title}</h2>
+              <div class="bento-more">
+                <div class="bento-more-in">
+                  <p class="bento-lead">{it.lead}</p>
+                  {it.scope && (
+                    <ul class="bento-scope">
+                      {it.scope.map((s) => <li>{s}</li>)}
+                    </ul>
+                  )}
+                  <span class="bento-go">{more} <span aria-hidden="true">&#8594;</span></span>
+                </div>
+              </div>
+            </div>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

@@ -18,9 +18,9 @@ const { title, items } = Astro.props;
 <section class="section">
   <div class="wrap">
     <h2 class="h-title" data-split>{title}</h2>
-    <ul class="sib">
+    <ul class="sib" data-cols>
       {items.map((o) => (
-        <li data-fade>
+        <li>
           <a href={o.href}>
             <div class="sib-photo"><Media src={o.image} alt="" ratio="4 / 3" pos={o.pos} sizes="(min-width: 1000px) 22vw, (min-width: 640px) 46vw, 100vw" /></div>
             <h3>{o.title}</h3>

@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import PageHero from '../components/PageHero.astro';
-import BandList from '../components/BandList.astro';
+import ServiceMosaic from '../components/ServiceMosaic.astro';
 import CtaEnd from '../components/CtaEnd.astro';
 import type { Lang } from '../config/site';
 import { getT, localePath } from '../i18n';
@@ -17,14 +17,22 @@ export interface Props {
 const { lang } = Astro.props;
 const t = getT(lang);
 const p = t.servicesPage;
-const items = services.map((s) => ({ href: localePath(lang, `/servicios/${s.id}`), title: s[lang].title, text: s[lang].lead, image: s.image, pos: s.pos }));
+// La celda grande del mosaico es la única que muestra alcances; el resto se queda en el titular y la frase.
+const items = services.map((s, i) => ({
+  href: localePath(lang, `/servicios/${s.id}`),
+  title: s[lang].title,
+  lead: s[lang].lead,
+  scope: i === 0 ? s[lang].items?.slice(0, 3) : undefined,
+  image: s.image,
+  pos: s.pos,
+}));
 ---
 
 <Base title={t.nav.services} lang={lang} description={p.meta} path="/servicios" jsonLd={[breadcrumbSchema(lang, [{ name: t.common.home, path: '/' }, { name: t.nav.services, path: '/servicios' }])]}>
   <Nav lang={lang} path="/servicios" dark />
   <main id="main">
     <PageHero title={p.title} intro={p.intro} image={photos.sanDiego} pos="50% 60%" />
-    <BandList items={items} more={t.common.seeMore} />
+    <ServiceMosaic items={items} more={t.common.seeMore} />
     <CtaEnd lang={lang} title={p.cta.title} text={p.cta.text} />
   </main>
   <Footer lang={lang} />

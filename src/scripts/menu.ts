@@ -76,7 +76,7 @@ function bind() {
     if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
     else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
   }, { signal });
-  matchMedia('(min-width: 901px)').addEventListener('change', (e) => e.matches && open && setOpen(false), { signal });
+  matchMedia('(min-width: 980px)').addEventListener('change', (e) => e.matches && open && setOpen(false), { signal });
 }
 
 document.addEventListener('astro:page-load', bind);

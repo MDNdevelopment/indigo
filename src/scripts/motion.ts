@@ -123,9 +123,9 @@ function declarative() {
 
   // Grupos de hijos (flip, skew, shutter). En escritorio el contenedor dispara a todos con stagger; en móvil los hijos se apilan
   // y el contenedor es altísimo, así que cada hijo dispara con su propio trigger cuando asoma.
-  const kids = (el: HTMLElement, from: gsap.TweenVars, to: gsap.TweenVars, start: string) => {
+  const kids = (el: HTMLElement, from: gsap.TweenVars, to: gsap.TweenVars, start: string, max = 0.8) => {
     const list = Array.from(el.children) as HTMLElement[];
-    if (!isMobile()) return ft(list, from, { ...to, stagger: stag(list.length, 0.12, 0.8), scrollTrigger: once(el, start) });
+    if (!isMobile()) return ft(list, from, { ...to, stagger: stag(list.length, 0.12, max), scrollTrigger: once(el, start) });
     list.forEach((c) => ft(c, from, { ...to, duration: Math.min(Number(to.duration ?? 1), 0.8), scrollTrigger: once(c) }));
   };
 
@@ -141,7 +141,14 @@ function declarative() {
 
   // Hijos que se revelan como persiana
   $$('[data-shutter]').forEach((el) =>
-    kids(el, { clipPath: 'inset(100% 0 0 0)', y: 60 }, { clipPath: 'inset(0% 0 0 0)', y: 0, duration: 1.1, ease: 'expo.out' }, 'top 88%'),
+    kids(el, { clipPath: 'inset(100% 0 0 0)', y: 60 }, { clipPath: 'inset(0% 0 0 0)', y: 0, duration: 0.85, ease: 'expo.out' }, 'top 88%', 0.5),
+  );
+
+  // Persiana por elemento: para bloques altos que se apilan, cada uno con su propio trigger
+  $$('[data-shutter-item]').forEach((el) =>
+    ft(el, { clipPath: 'inset(100% 0 0 0)', y: 60 }, {
+      clipPath: 'inset(0% 0 0 0)', y: 0, duration: 0.85, ease: 'expo.out', scrollTrigger: once(el, 'top 88%'),
+    }),
   );
 
   // Frase gigante que se ilumina palabra a palabra
@@ -171,6 +178,63 @@ function declarative() {
       scrollTrigger: once(el, 'top 90%'),
       onUpdate: () => (el.textContent = Math.round(o.v).toLocaleString(document.documentElement.lang || 'es') + suffix),
     });
+  });
+
+  // Línea divisoria que se dibuja de un extremo al otro
+  $$('[data-rule]').forEach((el) =>
+    ft(el, { scaleX: 0 }, {
+      scaleX: 1,
+      duration: 0.9,
+      ease: 'expo.out',
+      transformOrigin: el.dataset.rule === 'right' ? '100% 50%' : '0% 50%',
+      scrollTrigger: once(el, 'top 92%'),
+    }),
+  );
+
+  // Retículas que se arman: cada pieza entra desde el borde que le toca, por columnas
+  $$('[data-cols]').forEach((el) => {
+    const list = Array.from(el.children) as HTMLElement[];
+    if (!list.length) return;
+    if (isMobile()) {
+      list.forEach((c) =>
+        ft(c, { y: 34, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out', scrollTrigger: once(c) }),
+      );
+      return;
+    }
+    const order = [...list].sort((a, b) => a.offsetLeft - b.offsetLeft || a.offsetTop - b.offsetTop);
+    const each = stag(order.length, 0.11, 0.6);
+    const tl = gsap.timeline({ scrollTrigger: once(el, 'top 86%') });
+    order.forEach((c, i) =>
+      tl.fromTo(
+        c,
+        { x: c.offsetLeft + c.offsetWidth / 2 < el.clientWidth / 2 ? -54 : 54, opacity: 0 },
+        { x: 0, opacity: 1, duration: 0.85, ease: 'expo.out', clearProps: 'opacity,transform' },
+        i * each,
+      ),
+    );
+  });
+
+  // Portadas que se firman: la foto no se mueve; suben las palabras del titular y se dibuja la línea de acento
+  $$('[data-cover]').forEach((el) => {
+    const cards = Array.from(el.children) as HTMLElement[];
+    if (!cards.length) return;
+    const dur = isMobile() ? 0.8 : 0.9;
+    const add = (tl: gsap.core.Timeline, card: HTMLElement, at: number) => {
+      const title = card.querySelector<HTMLElement>('[data-cover-title]');
+      const rule = card.querySelector<HTMLElement>('[data-cover-rule]');
+      const words = title ? splitWords(title) : [];
+      tl.fromTo(card, { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out', clearProps: 'opacity,transform' }, at);
+      if (words.length)
+        tl.fromTo(words, { yPercent: 115 }, { yPercent: 0, duration: dur, ease: 'expo.out', stagger: stag(words.length, 0.035, 0.3), clearProps: 'transform' }, at + 0.1);
+      if (rule) tl.fromTo(rule, { scaleX: 0 }, { scaleX: 1, duration: 0.7, ease: 'expo.out', clearProps: 'transform' }, at + 0.28);
+    };
+    if (isMobile()) {
+      cards.forEach((c) => add(gsap.timeline({ scrollTrigger: once(c) }), c, 0));
+      return;
+    }
+    const tl = gsap.timeline({ scrollTrigger: once(el, 'top 85%') });
+    const each = stag(cards.length, 0.14, 0.45);
+    cards.forEach((c, i) => add(tl, c, i * each));
   });
 
   // Parallax suave

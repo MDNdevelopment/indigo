@@ -41,13 +41,14 @@ const crumbs = [{ name: t.common.home, path: '/' }, { name: t.nav.projects, path
 
     <section class="section" data-filter-root data-live={country ? undefined : ''}>
       <div class="wrap">
+        <span class="hairline" data-rule aria-hidden="true"></span>
         <div class="filters" data-filter-bar hidden role="group" aria-label={p.filterLabel}>
           <button type="button" data-filter="todos" aria-pressed="true" hidden>{t.common.all}</button>
           {filters.map((f) => <button type="button" data-filter={f.id} aria-pressed="false" hidden>{f[lang].title}</button>)}
         </div>
         <nav class="by-country" aria-label={p.byCountry}>
           <span>{p.byCountry}</span>
-          <ul>
+          <ul data-cols>
             <li><a href={L('/proyectos')} data-country-filter="todos" aria-current={country ? undefined : 'page'}>{t.common.all}</a></li>
             {countries.map((c) => (
               <li><a href={L(`/proyectos/pais/${countrySlugs[c]}`)} data-country-filter={countrySlugs[c]} aria-current={c === country ? 'page' : undefined}>{countryNames[c][lang]}</a></li>

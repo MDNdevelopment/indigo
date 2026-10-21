@@ -36,7 +36,7 @@ const others = services.filter((sv) => sv.id !== service.id).map((o) => ({ href:
 
     <section class="section" id="alcance">
       <div class="wrap">
-        <p class="svc-big" data-fade>{x.text}</p>
+        <p class="svc-big" data-scrub data-scrub-floor="0.7">{x.text}</p>
       </div>
     </section>
 
@@ -44,8 +44,8 @@ const others = services.filter((sv) => sv.id !== service.id).map((o) => ({ href:
       <section class="section section-soft">
         <div class="wrap">
           <h2 class="svc-scope-title" data-split>{p.includes}</h2>
-          <ul class="svc-checks">
-            {x.items.map((it) => <li data-batch>{it}</li>)}
+          <ul class="svc-checks" data-shutter>
+            {x.items.map((it) => <li>{it}</li>)}
           </ul>
         </div>
       </section>

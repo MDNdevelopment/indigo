@@ -54,7 +54,7 @@ const places = [
         <Media src={photos.turbinas} alt="" sizes="100vw" pos="60% 60%" />
       </div>
       <div class="wrap band-copy">
-        <p class="statement" data-lines>{t.home.band.statement}</p>
+        <p class="statement" data-scrub data-scrub-floor="0.6">{t.home.band.statement}</p>
         <p class="band-facts" data-fade>{t.home.band.facts}</p>
       </div>
     </section>
@@ -63,6 +63,7 @@ const places = [
     <section class="section" id="servicios">
       <div class="wrap">
         <div class="head-row">
+          <span class="hairline" data-rule aria-hidden="true"></span>
           <div>
             <h2 class="h-title" data-split>{t.home.services.title}</h2>
             <p class="lead head-lead" data-fade>{t.home.services.lead}</p>
@@ -80,14 +81,15 @@ const places = [
     <section class="section section-soft" id="sectores">
       <div class="wrap">
         <div class="head-row">
+          <span class="hairline" data-rule aria-hidden="true"></span>
           <div>
             <h2 class="h-title" data-split>{t.home.sectors.title}</h2>
           </div>
           <a class="link-arrow" href={L('/sectores')} data-fade>{t.home.sectors.link} →</a>
         </div>
-        <ul class="sec-spec">
+        <ul class="sec-spec" data-skew>
           {sectors.map((s) => (
-            <li data-batch>
+            <li>
               <a href={L(`/sectores/${s.id}`)}>
                 <h3>{s[lang].title}</h3>
                 <p>{s[lang].short}</p>
@@ -107,16 +109,17 @@ const places = [
     <section class="section" id="obras">
       <div class="wrap">
         <div class="head-row">
+          <span class="hairline" data-rule aria-hidden="true"></span>
           <h2 class="h-title" data-split>{t.home.projects.title}</h2>
           <a class="link-arrow" href={L('/proyectos')} data-fade>{t.home.projects.link} →</a>
         </div>
 
-        <ul class="ledger">
+        <ul class="ledger" data-cols>
           {featured.map((p) => {
             const x = projectText(p, lang);
             const sector = sectors.find((q) => q.id === p.sector)!;
             return (
-              <li data-batch>
+              <li>
                 <a href={L(`/proyectos/${p.slug}`)}>
                   <span class="ledger-fig">{p.capacity ?? sector[lang].title}</span>
                   <span class="ledger-text">

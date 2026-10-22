@@ -1,0 +1,62 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import PageHero from '../components/PageHero.astro';
+import CapabilityList from '../components/CapabilityList.astro';
+import CtaEnd from '../components/CtaEnd.astro';
+import type { Lang } from '../config/site';
+import { getT, localePath } from '../i18n';
+import { photos } from '../data/photos';
+import { sectors } from '../data/sectors';
+import { capabilities, capabilitiesBy } from '../data/capabilities';
+import { breadcrumbSchema } from '../lib/schema';
+
+export interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = getT(lang);
+const p = t.solutionsPage;
+const path = '/soluciones';
+const groups = sectors.map((s) => ({
+  id: s.id,
+  title: s[lang].title,
+  items: capabilitiesBy(s.id).map((c) => ({ title: c[lang].title, text: c[lang].text })),
+})).filter((g) => g.items.length > 0);
+const n = String(capabilities.length);
+const intro = p.intro.replace('{n}', n);
+const meta = p.meta.replace('{n}', n);
+---
+
+<Base title={t.nav.solutions} lang={lang} description={meta} {path} jsonLd={[breadcrumbSchema(lang, [{ name: t.common.home, path: '/' }, { name: t.nav.solutions, path }])]}>
+  <Nav lang={lang} {path} dark />
+  <main id="main">
+    <PageHero title={p.title} intro={intro} image={photos.planos} pos="50% 50%" />
+
+    <section class="section">
+      <div class="wrap">
+        <span class="hairline" data-rule aria-hidden="true"></span>
+        <nav class="by-country" aria-label={p.jump}>
+          <span>{p.jump}</span>
+          <ul>
+            {groups.map((g) => <li><a href={`#${g.id}`}>{g.title}</a></li>)}
+          </ul>
+        </nav>
+
+        {groups.map((g) => (
+          <div class="sol-group" id={g.id}>
+            <div class="head-row">
+              <h2 class="h-title" data-split>{g.title}</h2>
+              <a class="link-arrow" href={localePath(lang, `/sectores/${g.id}`)} data-fade>{t.common.seeSector} →</a>
+            </div>
+            <CapabilityList items={g.items} />
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <CtaEnd lang={lang} title={p.cta.title} text={p.cta.text} />
+  </main>
+  <Footer lang={lang} />
+</Base>

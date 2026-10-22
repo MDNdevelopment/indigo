@@ -33,6 +33,12 @@ const items = services.map((s, i) => ({
   <main id="main">
     <PageHero title={p.title} intro={p.intro} image={photos.sanDiego} pos="50% 60%" />
     <ServiceMosaic items={items} more={t.common.seeMore} />
+    <section class="section">
+      <div class="wrap head-row">
+        <h2 class="h-title" data-split>{t.solutionsPage.title}</h2>
+        <a class="link-arrow" href={localePath(lang, '/soluciones')} data-fade>{t.common.allSolutions} →</a>
+      </div>
+    </section>
     <CtaEnd lang={lang} title={p.cta.title} text={p.cta.text} />
   </main>
   <Footer lang={lang} />

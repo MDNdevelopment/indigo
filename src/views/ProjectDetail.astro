@@ -46,13 +46,13 @@ const facts = [
 >
   <Nav lang={lang} path={path} dark />
   <main id="main">
-    <PageHero title={x.title} intro={x.summary} image={project.image} pos={project.pos} />
+    <PageHero compact title={x.title} intro={x.summary} image={project.image} pos={project.pos} />
 
     <section class="section">
       <div class="wrap project-detail">
-        <dl class="facts" data-cols>
+        <dl class="project-facts" data-cols>
           {facts.map((r) => (
-            <div class="fact">
+            <div class="project-fact">
               <dt>{r.k}</dt>
               <dd>{r.v}</dd>
             </div>
@@ -77,8 +77,10 @@ const facts = [
 
     <section class="section section-dark next-project">
       <div class="wrap">
-        <p class="lead" data-lines>{t.common.nextProject}</p>
-        <a class="next-link" href={L(`/proyectos/${next.slug}`)} data-split>{nextText.title} →</a>
+        <div>
+          <p class="lead" data-lines>{t.common.nextProject}</p>
+          <a class="next-link" href={L(`/proyectos/${next.slug}`)} data-split>{nextText.title} →</a>
+        </div>
         <p class="next-back"><a class="link-arrow" href={L('/proyectos')}>{t.common.backToProjects}</a></p>
       </div>
     </section>

@@ -29,6 +29,9 @@ export const es = {
     relatedProjects: 'Proyectos en este sector',
     otherSectors: 'Otros sectores',
     inThisSector: 'En este sector',
+    sectorSolutions: 'Soluciones en este sector',
+    allSolutions: 'Ver todas las soluciones',
+    seeSector: 'Ver el sector',
     otherQuality: 'Más sobre calidad, seguridad y ambiente',
     otherServices: 'Otros servicios',
     nextProject: 'Siguiente proyecto',
@@ -39,7 +42,6 @@ export const es = {
     ctaRoutes: {
       project: 'Tengo un proyecto',
       projectText: 'Cuéntanos el alcance y te decimos cómo podemos ayudarte.',
-      careers: 'Quiero trabajar en Indigo',
       call: 'Prefiero llamar o escribir',
     },
   },
@@ -47,6 +49,7 @@ export const es = {
   nav: {
     about: 'Nosotros',
     services: 'Servicios',
+    solutions: 'Soluciones',
     sectors: 'Sectores',
     projects: 'Proyectos',
     quality: 'Calidad',
@@ -70,28 +73,28 @@ export const es = {
     slides: [
       {
         label: 'Soluciones',
-        title: 'Soluciones globales para energía, industria e infraestructura.',
+        title: 'Soluciones globales para energía, industria e infraestructura',
         text: 'Ingeniería, procura, construcción y puesta en marcha a cargo de un mismo equipo, con proyectos en cinco países.',
         cta: 'Conocer Indigo',
         href: '/nosotros',
       },
       {
         label: 'Energía',
-        title: 'Plantas de generación de hasta 450 MW.',
+        title: 'Plantas de generación de hasta 450 MW',
         text: 'Centrales termoeléctricas con ingeniería, procura, construcción y puesta en marcha a cargo de un mismo equipo.',
         cta: 'Ver energía',
         href: '/sectores/energia',
       },
       {
         label: 'Petróleo y Gas',
-        title: 'Patios de tanques de hasta 10.000 m³.',
+        title: 'Patios de tanques de hasta 10.000 m³',
         text: 'Almacenamiento, bombeo y sistemas contra incendio para YPFB, RECOPE y Refinería Isla.',
         cta: 'Ver petróleo y gas',
         href: '/sectores/petroleo-gas',
       },
       {
         label: 'Infraestructura',
-        title: 'Una doble vía de 56 km con 14 puentes.',
+        title: 'Una doble vía de 56 km con 14 puentes',
         text: 'Vialidad, edificaciones industriales, complejos residenciales y obras hoteleras.',
         cta: 'Ver infraestructura',
         href: '/sectores/infraestructura',
@@ -118,7 +121,7 @@ export const es = {
       link: 'Ver todos los proyectos',
     },
     map: {
-      title: 'Sede en Caracas, obras en América y Oriente Medio.',
+      title: 'Sede en Caracas, obras en América y Oriente Medio',
       lead: 'Ejecutamos proyectos en Venezuela, Bolivia, Costa Rica, Curazao y Arabia Saudita, y tenemos presencia en México y Oriente Medio.',
       home: 'Sede',
       aria: 'Mapa con la presencia de Indigo',
@@ -154,7 +157,7 @@ export const es = {
 
   about: {
     meta: 'Quiénes somos, nuestra cultura y nuestro equipo.',
-    title: 'Proveedor global de soluciones.',
+    title: 'Proveedor global de soluciones',
     intro: 'Empresa venezolana con sede en Caracas y proyectos en cinco países.',
     who: {
       statement:
@@ -247,26 +250,37 @@ export const es = {
       projectMany: 'proyectos',
     },
     cta: {
-      title: 'Hablemos de tu próximo proyecto.',
+      title: 'Hablemos de tu próximo proyecto',
     },
   },
 
   servicesPage: {
     meta: 'Ingeniería, procura, construcción, puesta en marcha y tecnología para proyectos de energía, petróleo y gas, agua e infraestructura.',
-    title: 'Servicios y soluciones, de la ingeniería a la puesta en marcha.',
+    title: 'Servicios y soluciones, de la ingeniería a la puesta en marcha',
     intro: 'Podemos ejecutar el proyecto completo o intervenir en la etapa que necesites.',
     includes: 'Qué incluye',
     others: 'Otros servicios',
     cta: {
-      title: 'Definamos juntos la etapa que tu proyecto requiere.',
+      title: 'Definamos juntos la etapa que tu proyecto requiere',
       text: 'Te respondemos con una propuesta de alcance.',
     },
   },
 
+  solutionsPage: {
+    meta: 'Soluciones de ingeniería, procura y construcción de Indigo: {n} áreas en energía, petróleo y gas, agua, infraestructura e industria.',
+    title: 'Soluciones para cada etapa de tu obra',
+    intro: 'Estas son las {n} áreas donde aplicamos ingeniería, procura y construcción, agrupadas por sector.',
+    jump: 'Ir a un sector',
+    cta: {
+      title: '¿Tu proyecto necesita alguna de estas soluciones?',
+      text: 'Cuéntanos el alcance y te respondemos con una propuesta.',
+    },
+  },
+
   sectorsPage: {
-    meta: 'Energía, petróleo y gas, agua e infraestructura: los sectores donde Indigo desarrolla proyectos.',
-    title: 'Los sectores donde construimos.',
-    intro: 'Cuatro sectores con alcances que van de la ingeniería básica a la puesta en marcha.',
+    meta: 'Energía, petróleo y gas, agua, infraestructura e industria: los sectores donde Indigo desarrolla proyectos.',
+    title: 'Los sectores donde construimos',
+    intro: 'Cinco sectores con alcances que van de la ingeniería básica a la puesta en marcha.',
     cta: {
       title: '¿Tu proyecto está en uno de estos sectores?',
       text: 'Hablemos del alcance.',
@@ -275,14 +289,9 @@ export const es = {
 
   projectsPage: {
     meta: 'Proyectos de generación eléctrica, almacenamiento de combustibles, vialidad, infraestructura y más, en cinco países.',
-    title: 'Proyectos que ya están en operación.',
+    title: 'Proyectos que ya están en operación',
     intro: 'Una selección de obras en Venezuela, Bolivia, Costa Rica, Curazao y Arabia Saudita.',
     byCountry: 'Por país',
-    country: {
-      meta: 'Proyectos de Indigo en {country}.',
-      title: 'Proyectos en {country}',
-      intro: 'Obras de Indigo Energy International en {country}.',
-    },
     filterLabel: 'Filtrar por sector',
     facts: {
       client: 'Cliente',
@@ -301,18 +310,18 @@ export const es = {
 
   qualityPage: {
     meta: 'Política de calidad, política ambiental, seguridad industrial e higiene ocupacional y certificaciones de Indigo.',
-    title: 'Calidad, seguridad y ambiente.',
+    title: 'Calidad, seguridad y ambiente',
     intro: 'Políticas y certificaciones que se aplican en la empresa y en cada proyecto en ejecución.',
-    listTitle: 'Nuestros compromisos.',
+    listTitle: 'Nuestros compromisos',
     cta: {
-      title: 'Conoce cómo trabajamos.',
+      title: 'Conoce cómo trabajamos',
       text: 'Escríbenos y te contamos.',
     },
   },
 
   contactPage: {
     meta: 'Contacta a Indigo Energy International para información y negocios.',
-    title: 'Hablemos de tu proyecto.',
+    title: 'Hablemos de tu proyecto',
     intro: 'Cuéntanos qué necesitas. Te respondemos con una propuesta de alcance.',
     form: {
       name: 'Nombre',
@@ -387,7 +396,7 @@ export const es = {
   },
 
   notFound: {
-    title: 'No encontramos esa página.',
+    title: 'No encontramos esa página',
     text: 'Puede que el enlace haya cambiado con el nuevo sitio.',
     back: 'Volver al inicio',
   },

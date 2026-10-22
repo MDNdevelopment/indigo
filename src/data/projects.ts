@@ -14,7 +14,7 @@ export interface ProjectText {
 export interface Project {
   slug: string;
   country: CountryId;
-  sector: Exclude<SectorId, 'agua'>;
+  sector: SectorId;
   year?: string;
   client?: string;
   capacity?: string;
@@ -483,7 +483,7 @@ export const projects: Project[] = [
   {
     slug: 'planta-de-alimentos-arabia-saudita',
     country: 'sa',
-    sector: 'infraestructura',
+    sector: 'industria',
     year: '2016',
     client: 'Golden Tuna',
     image: photos.alimentos,

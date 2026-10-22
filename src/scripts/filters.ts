@@ -1,4 +1,4 @@
-// Filtros de proyectos en tiempo real: sector y país se combinan sin recargar. No usa GSAP.
+// Filtros de proyectos en tiempo real: sector y país se combinan sin recargar ni cambiar la URL. No usa GSAP.
 export {};
 
 function bind() {
@@ -7,9 +7,7 @@ function bind() {
     root.dataset.bound = '1';
     const items = Array.from(root.querySelectorAll<HTMLElement>('[data-item]'));
     const sectorBtns = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-filter]'));
-    const countryLinks = Array.from(root.querySelectorAll<HTMLAnchorElement>('[data-country-filter]'));
-    // En /proyectos los países filtran en la misma página; en la página de un país siguen siendo enlaces.
-    const live = root.hasAttribute('data-live');
+    const countryLinks = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-country-filter]'));
     let sector = 'todos';
     let country = 'todos';
 
@@ -27,10 +25,7 @@ function bind() {
         b.setAttribute('aria-pressed', String(id === sector));
         b.disabled = id !== 'todos' && !items.some((it) => it.dataset.cat === id && (country === 'todos' || it.dataset.countryId === country));
       });
-      if (live) countryLinks.forEach((a) => {
-        if (a.dataset.countryFilter === country) a.setAttribute('aria-current', 'page');
-        else a.removeAttribute('aria-current');
-      });
+      countryLinks.forEach((a) => a.setAttribute('aria-pressed', String(a.dataset.countryFilter === country)));
     };
 
     const apply = async (animate: boolean) => {
@@ -73,19 +68,15 @@ function bind() {
         apply(true);
       });
     });
-    if (live) {
-      countryLinks.forEach((a) =>
-        a.addEventListener('click', (e) => {
-          if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
-          e.preventDefault();
-          e.stopPropagation();
-          country = a.dataset.countryFilter!;
-          // si el sector elegido no existe en ese país, volver a "todos"
-          if (sector !== 'todos' && !items.some((it) => it.dataset.cat === sector && (country === 'todos' || it.dataset.countryId === country))) sector = 'todos';
-          apply(true);
-        }),
-      );
-    }
+    root.querySelector('[data-country-bar]')?.removeAttribute('hidden');
+    countryLinks.forEach((a) =>
+      a.addEventListener('click', () => {
+        country = a.dataset.countryFilter!;
+        // si el sector elegido no existe en ese país, volver a "todos"
+        if (sector !== 'todos' && !items.some((it) => it.dataset.cat === sector && (country === 'todos' || it.dataset.countryId === country))) sector = 'todos';
+        apply(true);
+      }),
+    );
     apply(false);
   });
 }

@@ -237,6 +237,34 @@ function declarative() {
     cards.forEach((c, i) => add(tl, c, i * each));
   });
 
+  // Obras destacadas: cada ficha sube en diagonal (fila a fila), el titular entra por palabras y la línea de acento se dibuja. La foto no se transforma.
+  $$('[data-works]').forEach((el) => {
+    const cards = Array.from(el.children) as HTMLElement[];
+    if (!cards.length) return;
+    const add = (tl: gsap.core.Timeline, card: HTMLElement, at: number) => {
+      const title = card.querySelector<HTMLElement>('[data-work-title]');
+      const rule = card.querySelector<HTMLElement>('[data-work-rule]');
+      const meta = card.querySelector<HTMLElement>('.work-meta');
+      const words = title ? splitWords(title) : [];
+      tl.fromTo(card, { y: 56, x: isMobile() ? 0 : -18, opacity: 0 }, { y: 0, x: 0, opacity: 1, duration: 0.95, ease: 'expo.out', clearProps: 'opacity,transform' }, at);
+      if (words.length) tl.fromTo(words, { yPercent: 115 }, { yPercent: 0, duration: 0.85, ease: 'expo.out', stagger: stag(words.length, 0.04, 0.25), clearProps: 'transform' }, at + 0.25);
+      if (rule) tl.fromTo(rule, { scaleX: 0, transformOrigin: '0% 50%' }, { scaleX: 1, duration: 0.7, ease: 'expo.out', clearProps: 'transform' }, at + 0.4);
+      if (meta) tl.fromTo(meta, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out', clearProps: 'opacity,transform' }, at + 0.5);
+    };
+    if (isMobile()) {
+      cards.forEach((c) => add(gsap.timeline({ scrollTrigger: once(c, 'top 92%') }), c, 0));
+      return;
+    }
+    // Se escalonan por fila y columna: la onda cae en diagonal.
+    const rows = [...new Set(cards.map((c) => c.offsetTop))].sort((a, b) => a - b);
+    const cols = [...new Set(cards.map((c) => c.offsetLeft))].sort((a, b) => a - b);
+    rows.forEach((top) => {
+      const row = cards.filter((c) => c.offsetTop === top);
+      const tl = gsap.timeline({ scrollTrigger: once(row[0], 'top 90%') });
+      row.forEach((c) => add(tl, c, cols.indexOf(c.offsetLeft) * 0.13));
+    });
+  });
+
   // Parallax suave
   $$('[data-parallax]').forEach((el) => {
     const k = Number(el.dataset.parallax || 0.15);

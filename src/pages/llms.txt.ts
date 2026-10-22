@@ -4,6 +4,7 @@ import { getT, localePath } from '../i18n';
 import { projects, projectText, countryNames } from '../data/projects';
 import { services } from '../data/services';
 import { sectors } from '../data/sectors';
+import { capabilities } from '../data/capabilities';
 
 export const GET: APIRoute = () => {
   const root = site.url.replace(/\/$/, '');
@@ -19,6 +20,7 @@ export const GET: APIRoute = () => {
     '',
     '## Sectores',
     ...sectors.map((s) => `- [${s.es.title}](${url(`/sectores/${s.id}`)}): ${s.es.short}`),
+    `- [Soluciones](${url('/soluciones')}): ${capabilities.length} áreas de capacidad técnica por sector`,
     '',
     '## Proyectos',
     ...projects.map((p) => `- [${projectText(p, 'es').title}](${url(`/proyectos/${p.slug}`)}): ${countryNames[p.country].es}. ${projectText(p, 'es').summary}`),

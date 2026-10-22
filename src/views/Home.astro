@@ -114,19 +114,16 @@ const places = [
           <a class="link-arrow" href={L('/proyectos')} data-fade>{t.home.projects.link} →</a>
         </div>
 
-        <ul class="ledger" data-cols>
+        <ul class="works" data-works>
           {featured.map((p) => {
             const x = projectText(p, lang);
-            const sector = sectors.find((q) => q.id === p.sector)!;
             return (
-              <li>
+              <li class="work">
                 <a href={L(`/proyectos/${p.slug}`)}>
-                  <span class="ledger-fig">{p.capacity ?? sector[lang].title}</span>
-                  <span class="ledger-text">
-                    <strong>{x.title}</strong>
-                    <span>{countryNames[p.country][lang]}{p.client ? ` · ${p.client}` : ''}</span>
-                  </span>
-                  <Media src={p.image} alt="" ratio="16 / 9" sizes="9rem" pos={p.pos} />
+                  <div class="work-photo"><Media src={p.image} alt="" ratio="4 / 5" sizes="(min-width: 1000px) 23vw, (min-width: 640px) 46vw, 100vw" pos={p.pos} /></div>
+                  <h3 class="work-title" data-work-title>{x.title}</h3>
+                  <span class="hairline work-rule" data-work-rule aria-hidden="true"></span>
+                  <span class="work-meta">{countryNames[p.country][lang]}{p.client ? ` · ${p.client}` : ''}</span>
                 </a>
               </li>
             );

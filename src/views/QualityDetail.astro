@@ -34,7 +34,7 @@ const others = qualityPages.filter((q) => q.id !== page.id).map((o) => ({ href: 
   <main id="main">
     <PageHero title={x.title} intro={x.lead} image={page.image} pos={page.pos} />
     <InfoBlocks blocks={x.blocks} />
-    <SiblingCards title={t.common.otherQuality} items={others} />
+    <SiblingCards title={t.common.otherQuality} compact items={others} />
     <CtaEnd lang={lang} title={t.qualityPage.cta.title} text={t.qualityPage.cta.text} />
   </main>
   <Footer lang={lang} />

@@ -6,8 +6,6 @@ import { services, serviceText } from '../data/services';
 import { sectors } from '../data/sectors';
 import { subsectors } from '../data/subsectors';
 import { qualityPages, qualityText } from '../data/quality';
-import { countryNames, countrySlugs } from '../data/projects';
-import type { CountryId } from '../data/projects';
 import logoColor from '../assets/brand/logo-indigo.svg';
 import isotipo from '../assets/brand/isotipo.svg';
 import logoWhite from '../assets/brand/logo-indigo-blanco.svg';
@@ -24,14 +22,13 @@ const other = langs.find((l) => l !== lang)!;
 const alt = alternates(path);
 interface NavItem { label: string; href: string; children?: { label: string; href: string; nested?: boolean }[] }
 const sub = t.about.sub;
-const countryIds = Object.keys(countrySlugs) as CountryId[];
 const links: NavItem[] = [
   {
     label: t.nav.about,
     href: '/nosotros',
     children: (['cultura', 'talento', 'clientes'] as const).map((id) => ({ label: sub[id].title, href: `/nosotros/${id}` })),
   },
-  { label: t.nav.services, href: '/servicios', children: services.map((s) => ({ label: serviceText(s, lang).title, href: `/servicios/${s.id}` })) },
+  { label: t.nav.services, href: '/servicios', children: [{ label: t.nav.solutions, href: '/soluciones' }, ...services.map((s) => ({ label: serviceText(s, lang).title, href: `/servicios/${s.id}` }))] },
   { label: t.nav.sectors, href: '/sectores', children: sectors.flatMap((s) => [
       { label: s[lang].title, href: `/sectores/${s.id}` },
       ...subsectors.filter((o) => o.parent === s.id).map((o) => ({ label: o[lang].title, href: `/sectores/${o.parent}/${o.id}`, nested: true })),
@@ -40,7 +37,6 @@ const links: NavItem[] = [
   {
     label: t.nav.projects,
     href: '/proyectos',
-    children: [{ label: t.nav.allProjects, href: '/proyectos' }, ...countryIds.map((c) => ({ label: countryNames[c][lang], href: `/proyectos/pais/${countrySlugs[c]}` }))],
   },
   { label: t.nav.quality, href: '/calidad', children: qualityPages.map((q) => ({ label: qualityText(q, lang).title, href: `/calidad/${q.id}` })) },
 ];

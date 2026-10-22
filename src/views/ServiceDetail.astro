@@ -51,7 +51,7 @@ const others = services.filter((sv) => sv.id !== service.id).map((o) => ({ href:
       </section>
     )}
 
-    <SiblingCards title={p.others} items={others} />
+    <SiblingCards title={p.others} compact items={others} />
 
     <CtaEnd lang={lang} title={p.cta.title} text={p.cta.text} />
   </main>

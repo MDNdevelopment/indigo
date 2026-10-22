@@ -1,0 +1,20 @@
+---
+export interface Item {
+  title: string;
+  text: string;
+}
+export interface Props {
+  items: Item[];
+}
+const { items } = Astro.props;
+---
+
+<!-- Áreas de capacidad técnica: título y párrafo en dos columnas, separados por líneas finas. -->
+<ul class="caps">
+  {items.map((it) => (
+    <li class="cap" data-batch>
+      <h3>{it.title}</h3>
+      <p>{it.text}</p>
+    </li>
+  ))}
+</ul>

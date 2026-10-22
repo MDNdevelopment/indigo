@@ -10,14 +10,15 @@ export interface Item {
 export interface Props {
   title: string;
   items: Item[];
+  compact?: boolean;
 }
-const { title, items } = Astro.props;
+const { title, items, compact = false } = Astro.props;
 ---
 
 <!-- Tarjetas con foto hacia las páginas hermanas, para cambiar de una a otra sin volver al menú -->
-<section class="section">
+<section class:list={['section', compact && 'sib-compact']}>
   <div class="wrap">
-    <h2 class="h-title" data-split>{title}</h2>
+    {compact ? <h2 class="sib-title">{title}</h2> : <h2 class="h-title" data-split>{title}</h2>}
     <ul class="sib" data-cols>
       {items.map((o) => (
         <li>

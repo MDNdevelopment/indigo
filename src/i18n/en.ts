@@ -30,6 +30,9 @@ export const en = {
     relatedProjects: 'Projects in this sector',
     otherSectors: 'Other sectors',
     inThisSector: 'In this sector',
+    sectorSolutions: 'Solutions in this sector',
+    allSolutions: 'See all solutions',
+    seeSector: 'View the sector',
     otherQuality: 'More on quality, safety and environment',
     otherServices: 'Other services',
     nextProject: 'Next project',
@@ -40,7 +43,6 @@ export const en = {
     ctaRoutes: {
       project: 'I have a project',
       projectText: 'Tell us the scope and we will tell you how we can help.',
-      careers: 'I want to work at Indigo',
       call: "I'd rather call or email",
     },
   },
@@ -48,6 +50,7 @@ export const en = {
   nav: {
     about: 'About',
     services: 'Services',
+    solutions: 'Solutions',
     sectors: 'Sectors',
     projects: 'Projects',
     quality: 'Quality',
@@ -70,28 +73,28 @@ export const en = {
     slides: [
       {
         label: 'Solutions',
-        title: 'Global solutions for energy, industry and infrastructure.',
+        title: 'Global solutions for energy, industry and infrastructure',
         text: 'Engineering, procurement, construction and commissioning delivered by one team, with projects in five countries.',
         cta: 'Meet Indigo',
         href: '/nosotros',
       },
       {
         label: 'Energy',
-        title: 'Power plants of up to 450 MW.',
+        title: 'Power plants of up to 450 MW',
         text: 'Thermoelectric plants where one team handles engineering, procurement, construction and commissioning.',
         cta: 'See energy',
         href: '/sectores/energia',
       },
       {
         label: 'Oil and Gas',
-        title: 'Tank farms of up to 10,000 m³.',
+        title: 'Tank farms of up to 10,000 m³',
         text: 'Storage, pumping and fire protection systems for YPFB, RECOPE and Isla Refinery.',
         cta: 'See oil and gas',
         href: '/sectores/petroleo-gas',
       },
       {
         label: 'Infrastructure',
-        title: 'A 56 km dual carriageway with 14 bridges.',
+        title: 'A 56 km dual carriageway with 14 bridges',
         text: 'Roads, industrial buildings, residential complexes and hotel works.',
         cta: 'See infrastructure',
         href: '/sectores/infraestructura',
@@ -118,7 +121,7 @@ export const en = {
       link: 'See all projects',
     },
     map: {
-      title: 'Headquartered in Caracas, working across the Americas and the Middle East.',
+      title: 'Headquartered in Caracas, working across the Americas and the Middle East',
       lead: 'We deliver projects in Venezuela, Bolivia, Costa Rica, Curaçao and Saudi Arabia, and we have a presence in Mexico and the Middle East.',
       home: 'Headquarters',
       aria: 'Map showing where Indigo operates',
@@ -154,7 +157,7 @@ export const en = {
 
   about: {
     meta: 'Who we are, our culture and our team.',
-    title: 'Global solutions provider.',
+    title: 'Global solutions provider',
     intro: 'A Venezuelan company headquartered in Caracas, with projects in five countries.',
     who: {
       statement:
@@ -253,20 +256,31 @@ export const en = {
 
   servicesPage: {
     meta: 'Engineering, procurement, construction, commissioning and technology for energy, oil and gas, water and infrastructure projects.',
-    title: 'Services and solutions, from engineering to commissioning.',
+    title: 'Services and solutions, from engineering to commissioning',
     intro: 'We can deliver the whole project or step in at the stage you need.',
     includes: 'What it includes',
     others: 'Other services',
     cta: {
-      title: 'Define with us the stage your project requires.',
+      title: 'Define with us the stage your project requires',
       text: 'We will reply with a proposed scope.',
     },
   },
 
+  solutionsPage: {
+    meta: 'Indigo engineering, procurement and construction solutions: {n} areas across energy, oil and gas, water, infrastructure and industry.',
+    title: 'Solutions for every stage of your project',
+    intro: 'These are the {n} areas where we apply engineering, procurement and construction, grouped by sector.',
+    jump: 'Jump to a sector',
+    cta: {
+      title: 'Does your project need any of these solutions?',
+      text: 'Tell us the scope and we will reply with a proposal.',
+    },
+  },
+
   sectorsPage: {
-    meta: 'Energy, oil and gas, water and infrastructure: the sectors where Indigo develops projects.',
-    title: 'The sectors where we build.',
-    intro: 'Four sectors, with scopes that run from basic engineering to commissioning.',
+    meta: 'Energy, oil and gas, water, infrastructure and industry: the sectors where Indigo develops projects.',
+    title: 'The sectors where we build',
+    intro: 'Five sectors, with scopes that run from basic engineering to commissioning.',
     cta: {
       title: 'Is your project in one of these sectors?',
       text: "Let's talk about the scope.",
@@ -275,14 +289,9 @@ export const en = {
 
   projectsPage: {
     meta: 'Power generation, fuel storage, roads, infrastructure and more, in five countries.',
-    title: 'Projects already in operation.',
+    title: 'Projects already in operation',
     intro: 'A selection of works in Venezuela, Bolivia, Costa Rica, Curaçao and Saudi Arabia.',
     byCountry: 'By country',
-    country: {
-      meta: 'Indigo projects in {country}.',
-      title: 'Projects in {country}',
-      intro: 'Works by Indigo Energy International in {country}.',
-    },
     filterLabel: 'Filter by sector',
     facts: {
       client: 'Client',
@@ -301,11 +310,11 @@ export const en = {
 
   qualityPage: {
     meta: 'Quality policy, environmental policy, occupational health and safety, and Indigo certifications.',
-    title: 'Quality, safety and environment.',
+    title: 'Quality, safety and environment',
     intro: 'Policies and certifications applied across the company and on every project in execution.',
-    listTitle: 'Our commitments.',
+    listTitle: 'Our commitments',
     cta: {
-      title: 'Learn how we work.',
+      title: 'Learn how we work',
       text: 'Write to us and we will tell you more.',
     },
   },

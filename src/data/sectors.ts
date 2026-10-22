@@ -2,7 +2,7 @@ import { photos } from './photos';
 import videoEnergia from '../assets/photos/video-energia.jpg';
 import videoPetroleoGas from '../assets/photos/video-petroleo-gas.jpg';
 
-export type SectorId = 'energia' | 'petroleo-gas' | 'agua' | 'infraestructura';
+export type SectorId = 'energia' | 'petroleo-gas' | 'agua' | 'infraestructura' | 'industria';
 
 export interface SectorGroup {
   title: string;
@@ -138,7 +138,7 @@ export const sectors: Sector[] = [
     image: photos.tanqueYpfb,
     video: { src: '/videos/petroleo-gas.mp4', poster: videoPetroleoGas, title: { es: 'Nuestro trabajo en petróleo y gas', en: 'Our work in oil and gas' } },
     es: {
-      title: 'Petróleo y Gas',
+      title: 'Petróleo y gas',
       short: 'Del pozo a la refinería: producción, transporte, almacenamiento, distribución y procesamiento.',
       lead: 'Contamos con un equipo altamente calificado y con amplia experiencia en procesos de upstream, midstream y downstream.',
       groups: [
@@ -161,7 +161,7 @@ export const sectors: Sector[] = [
       ],
     },
     en: {
-      title: 'Oil and Gas',
+      title: 'Oil and gas',
       short: 'From the well to the refinery: production, transport, storage, distribution and processing.',
       lead: 'We have a highly qualified team with extensive experience in upstream, midstream and downstream processes.',
       groups: [
@@ -296,6 +296,22 @@ export const sectors: Sector[] = [
           items: ['Infrastructure IPC projects', 'Structural reinforcement'],
         },
       ],
+    },
+  },
+  {
+    id: 'industria',
+    image: photos.parque,
+    es: {
+      title: 'Industria',
+      short: 'Plantas de proceso, naves, servicios auxiliares, control, protección contra incendios y telecomunicaciones.',
+      lead: 'Integramos los sistemas que hacen operar una planta: procesos agroindustriales, naves de gran tonelaje, servicios auxiliares, automatización, protección contra incendios y comunicaciones.',
+      groups: [],
+    },
+    en: {
+      title: 'Industry',
+      short: 'Process plants, industrial buildings, utilities, control, fire protection and telecommunications.',
+      lead: 'We integrate the systems that keep a plant running: agro-industrial processes, heavy-duty buildings, utilities, automation, fire protection and communications.',
+      groups: [],
     },
   },
 ];

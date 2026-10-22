@@ -8,53 +8,44 @@ import CtaEnd from '../components/CtaEnd.astro';
 import type { Lang } from '../config/site';
 import { getT, localePath } from '../i18n';
 import { photos } from '../data/photos';
-import { projects as allProjects, projectText, countryNames, countrySlugs } from '../data/projects';
-import type { CountryId } from '../data/projects';
+import { projects, projectText, countryNames, countrySlugs } from '../data/projects';
 import { sectors } from '../data/sectors';
 import { breadcrumbSchema } from '../lib/schema';
 
 export interface Props {
   lang: Lang;
-  /** si viene, lista solo los proyectos de ese país */
-  country?: CountryId;
 }
-const { lang, country } = Astro.props;
+const { lang } = Astro.props;
 const t = getT(lang);
 const p = t.projectsPage;
 const L = (path: string) => localePath(lang, path);
-const projects = country ? allProjects.filter((pr) => pr.country === country) : allProjects;
 const filters = sectors.filter((s) => projects.some((pr) => pr.sector === s.id));
-const countries = [...new Set(allProjects.map((pr) => pr.country))];
-const countryName = country ? countryNames[country][lang] : '';
-const fill = (str: string) => str.replaceAll('{country}', countryName);
-const path = country ? `/proyectos/pais/${countrySlugs[country]}` : '/proyectos';
-const title = country ? fill(p.country.title) : p.title;
-const intro = country ? fill(p.country.intro) : p.intro;
-const meta = country ? fill(p.country.meta) : p.meta;
-const crumbs = [{ name: t.common.home, path: '/' }, { name: t.nav.projects, path: '/proyectos' }, ...(country ? [{ name: countryName, path }] : [])];
+const countries = [...new Set(projects.map((pr) => pr.country))];
+const path = '/proyectos';
+const crumbs = [{ name: t.common.home, path: '/' }, { name: t.nav.projects, path }];
 ---
 
-<Base title={country ? title : t.nav.projects} lang={lang} description={meta} {path} jsonLd={[breadcrumbSchema(lang, crumbs)]}>
+<Base title={t.nav.projects} lang={lang} description={p.meta} {path} jsonLd={[breadcrumbSchema(lang, crumbs)]}>
   <Nav lang={lang} {path} dark />
   <main id="main">
-    <PageHero title={title} intro={intro} image={country ? projects[0].image : photos.bombas} pos={country ? projects[0].pos : '50% 60%'} />
+    <PageHero title={p.title} intro={p.intro} image={photos.bombas} pos="50% 60%" />
 
-    <section class="section" data-filter-root data-live={country ? undefined : ''}>
+    <section class="section" data-filter-root>
       <div class="wrap">
         <span class="hairline" data-rule aria-hidden="true"></span>
         <div class="filters" data-filter-bar hidden role="group" aria-label={p.filterLabel}>
           <button type="button" data-filter="todos" aria-pressed="true" hidden>{t.common.all}</button>
           {filters.map((f) => <button type="button" data-filter={f.id} aria-pressed="false" hidden>{f[lang].title}</button>)}
         </div>
-        <nav class="by-country" aria-label={p.byCountry}>
+        <div class="by-country" data-country-bar hidden role="group" aria-label={p.byCountry}>
           <span>{p.byCountry}</span>
           <ul data-cols>
-            <li><a href={L('/proyectos')} data-country-filter="todos" aria-current={country ? undefined : 'page'}>{t.common.all}</a></li>
+            <li><button type="button" data-country-filter="todos" aria-pressed="true">{t.common.all}</button></li>
             {countries.map((c) => (
-              <li><a href={L(`/proyectos/pais/${countrySlugs[c]}`)} data-country-filter={countrySlugs[c]} aria-current={c === country ? 'page' : undefined}>{countryNames[c][lang]}</a></li>
+              <li><button type="button" data-country-filter={countrySlugs[c]} aria-pressed="false">{countryNames[c][lang]}</button></li>
             ))}
           </ul>
-        </nav>
+        </div>
         <ul class="grid-projects">
           {projects.map((pr) => {
             const x = projectText(pr, lang);

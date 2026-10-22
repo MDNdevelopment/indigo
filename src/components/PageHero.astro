@@ -7,12 +7,14 @@ export interface Props {
   /** Foto del header. Distinta en cada página y distinta de la del hero del home. */
   image: ImageMetadata;
   pos?: string;
+  /** Titular más pequeño, para nombres largos (fichas de proyecto). */
+  compact?: boolean;
 }
-const { title, intro, image, pos } = Astro.props;
+const { title, intro, image, pos, compact = false } = Astro.props;
 ---
 
 <!-- Header diagonal dividido (ver references/headers.md): titular sobre el color de marca y foto con el borde izquierdo en diagonal. -->
-<section class="ph" data-hero-root style={`--iso:url(${isotipo.src})`}>
+<section class:list={['ph', compact && 'ph-compact']} data-hero-root style={`--iso:url(${isotipo.src})`}>
   <div class="ph-text">
     <h1 class="ph-title" data-split data-hero>{title}</h1>
     {intro && <p class="ph-lead" data-hero-rest>{intro}</p>}
